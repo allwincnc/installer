@@ -41,7 +41,7 @@ done
 case $TARGET_ID in
   1) TARGET="machinekit"; ;;
   2) TARGET="linuxcnc"; ;;
-  *) TARGET="machinekit"; ;;
+  *) TARGET="linuxcnc"; ;;
 esac
 
 
