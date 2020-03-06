@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Terminal=false
+Name=4D_axis
+Exec=linuxcnc /home/cnc/machinekit/configs/4D_axis/4D_axis.ini
+Type=Application
+Comment=Desktop Launcher for Machinekit config
+Icon=/usr/share/linuxcnc/machinekiticon.png
+Name[en_US.UTF-8]=4D_axis

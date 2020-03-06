@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Terminal=false
+Name=launch 4D_tk_arisc
+Exec=linuxcnc /home/cnc/machinekit/configs/ARISC/3tk/config.ini
+Type=Application
+Comment=Desktop Launcher for Machinekit config made by Stepconf
+Icon=/usr/share/linuxcnc/machinekiticon.png
+Name[en_US.UTF-8]=3tk_arisc
