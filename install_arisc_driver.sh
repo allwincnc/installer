@@ -53,8 +53,8 @@ if [ $(halcompile --help | grep Usage) ]; then
 elif [ $(comp --help | grep Usage) ]; then
   COMPILER="comp"
 else
-  echo "Can't find a "$TARGET" components compiler."
-  echo "Are "$TARGET" with it's DEV package are installed?"
+  echo "Can't find a components compiler for the '"$TARGET"'."
+  echo "Is "$TARGET"-dev-uspace package installed?"
   exit 1
 fi
 
