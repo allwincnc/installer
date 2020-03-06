@@ -2,7 +2,7 @@
 
 # var list
       NAME="ARISC drivers"
-  BASE_URL="https://cnc32.ru/orangecnc"
+  BASE_URL="https://github.cnc32.ru/orangecnc/installer/raw/branch/master"
    CUR_DIR=$(pwd)
    TMP_DIR="tmp"
  TARGET_ID=0
