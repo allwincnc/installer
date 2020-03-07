@@ -18,7 +18,7 @@ echo "--- Installing '"$NAME"' -------"
 
 
 # select the target from the arguments list
-if [ $# != 0 ]; then
+if [[ $# != 0 ]]; then
     for arg in $*; do
         case $arg in
             linuxcnc)   TARGET_ID=1; ;;
@@ -28,7 +28,7 @@ if [ $# != 0 ]; then
 fi
 
 # if no target selected yet
-while [ $TARGET_ID != 1 ] && [ $TARGET_ID != 2 ]; do
+while [[ $TARGET_ID != 1 && $TARGET_ID != 2 ]]; do
     echo    "Please select the target:"
     echo    "  1: for LinuxCNC"
     echo    "  2: for Machinekit"
@@ -48,7 +48,7 @@ esac
 # check a folder with sources
 SRC_DIR=$TARGET"/drivers/arisc"
 
-if [ ! -d $SRC_DIR ]; then
+if [[ ! -d $SRC_DIR ]]; then
     echo "Can't find the './"$SRC_DIR"' folder."
     cd $CUR_DIR
     exit 1
@@ -57,7 +57,7 @@ fi
 cd $SRC_DIR
 
 for file in ${ALL_FILES[*]}; do
-    if [ ! -f $file ]; then
+    if [[ ! -f $file ]]; then
         echo "Can't find the './"$SRC_DIR"/"$file"' file."
         cd $CUR_DIR
         exit 1
@@ -68,9 +68,9 @@ done
 
 
 # find a compiler
-if [ $(halcompile --help | grep Usage) ]; then
+if [[ $(halcompile --help | grep Usage) ]]; then
     COMPILER="halcompile"
-elif [ $(comp --help | grep Usage) ]; then
+elif [[ $(comp --help | grep Usage) ]]; then
     COMPILER="comp"
 else
     echo "Can't find a components compiler for the '"$TARGET"'."
