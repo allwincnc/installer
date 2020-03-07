@@ -142,5 +142,19 @@ done
 
 
 
+# create a desktop link to the configs folder
+DSK_CFG_DIR_LINK=$DSK_DIR"/configs for "$TARGET
+
+if [[ ! -L "${DSK_CFG_DIR_LINK}" ]]; then
+    ln -s -f $DST_DIR "${DSK_CFG_DIR_LINK}"
+fi
+
+if [[ ! -L "${DSK_CFG_DIR_LINK}" ]]; then
+    echo "Can't create the '${DSK_CFG_DIR_LINK}' link."
+fi
+
+
+
+
 # success
 echo "--- The '"$NAME"' successfuly installed -------"
