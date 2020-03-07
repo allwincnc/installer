@@ -1,3 +1,10 @@
+/********************************************************************
+ * Description:  stepgen_api.h
+ *               Allwinner ARISC firmware STEPGEN API
+ *
+ * Author: MX_Master (mikhail@vydrenko.ru)
+ ********************************************************************/
+
 #ifndef _STEPGEN_API_H
 #define _STEPGEN_API_H
 

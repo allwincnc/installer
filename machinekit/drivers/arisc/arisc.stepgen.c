@@ -1,3 +1,10 @@
+/********************************************************************
+ * Description:  arisc.stepgen.c
+ *               STEPGEN driver for the Allwinner ARISC firmware
+ *
+ * Author: MX_Master (mikhail@vydrenko.ru)
+ ********************************************************************/
+
 #include "rtapi.h"
 #include "rtapi_app.h"
 #include "hal.h"
@@ -15,11 +22,8 @@
 
 
 
-#if !defined(TARGET_PLATFORM_ALLWINNER)
-//#error "This driver is for the Allwinner platform only"
-#endif
-
-MODULE_DESCRIPTION("stepgen driver for the Allwinner ARISC firmware");
+MODULE_AUTHOR("MX_Master");
+MODULE_DESCRIPTION("STEPGEN driver for the Allwinner ARISC firmware");
 MODULE_LICENSE("GPL");
 
 
@@ -206,9 +210,6 @@ static void update_freq(void *arg, long period)
     "%s.%d." NAME, comp_name, ch);\
     g.VAL = DEFAULT;
 
-#define EXPORT_FUNC(FUNC,NAME,FP) \
-    hal_export_functf(FUNC, 0, FP, 0, comp_id, "%s."NAME, comp_name)
-
 #define PRINT_ERROR(MSG) \
     rtapi_print_msg(RTAPI_MSG_ERR, "%s: "MSG"\n", comp_name)
 
@@ -219,6 +220,7 @@ static int32_t malloc_and_export(const char *comp_name, int32_t comp_id)
 {
     int32_t r, ch;
     int8_t *data = ctrl_type, *token, type[STEPGEN_CH_CNT_MAX] = {0};
+    char name[HAL_NAME_LEN + 1];
 
     // get channels count and type
 
@@ -280,8 +282,10 @@ static int32_t malloc_and_export(const char *comp_name, int32_t comp_id)
     // export HAL functions
 
     r = 0;
-    r += EXPORT_FUNC(capture_pos, "capture-position", 1);
-    r += EXPORT_FUNC(update_freq, "update-freq", 1);
+    rtapi_snprintf(name, sizeof(name), "%s.capture-position", comp_name);
+    r += hal_export_funct(name, capture_pos, 0, 1, 0, comp_id);
+    rtapi_snprintf(name, sizeof(name), "%s.update-freq", comp_name);
+    r += hal_export_funct(name, update_freq, 0, 1, 0, comp_id);
     if ( r ) PRINT_ERROR_AND_RETURN("HAL functions export failed", -1);
 
     return 0;

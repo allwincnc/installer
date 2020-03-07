@@ -1,3 +1,10 @@
+/********************************************************************
+ * Description:  arisc.gpio.c
+ *               GPIO driver for the Allwinner ARISC firmware
+ *
+ * Author: MX_Master (mikhail@vydrenko.ru)
+ ********************************************************************/
+
 #include <stdint.h>
 #include <string.h>
 #include <stdlib.h>
@@ -12,10 +19,7 @@
 
 
 
-#if !defined(TARGET_PLATFORM_ALLWINNER)
-//#error "This driver is for the Allwinner platform only"
-#endif
-
+MODULE_AUTHOR("MX_Master");
 MODULE_DESCRIPTION("GPIO driver for the Allwinner ARISC firmware");
 MODULE_LICENSE("GPL");
 
@@ -162,6 +166,7 @@ static int32_t gpio_malloc_and_export(const char *comp_name, int32_t comp_id)
     int8_t* arg_str[2] = {in, out};
     int8_t n, r;
     uint8_t port;
+    char name[HAL_NAME_LEN + 1];
 
 
     // shared memory allocation
@@ -270,8 +275,10 @@ static int32_t gpio_malloc_and_export(const char *comp_name, int32_t comp_id)
 
     // export HAL functions
     r = 0;
-    r += hal_export_functf(gpio_write, 0, 0, 0, comp_id, "%s.write", comp_name);
-    r += hal_export_functf(gpio_read, 0, 0, 0, comp_id, "%s.read", comp_name);
+    rtapi_snprintf(name, sizeof(name), "%s.write", comp_name);
+    r += hal_export_funct(name, gpio_write, 0, 0, 0, comp_id);
+    rtapi_snprintf(name, sizeof(name), "%s.read", comp_name);
+    r += hal_export_funct(name, gpio_write, 0, 0, 0, comp_id);
     if ( r )
     {
         rtapi_print_msg(RTAPI_MSG_ERR, "%s: [GPIO] functions export failed\n", comp_name);

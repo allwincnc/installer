@@ -1,3 +1,10 @@
+/********************************************************************
+ * Description:  allwinner_CPU.h
+ *               Allwinner CPUs data set
+ *
+ * Author: MX_Master (mikhail@vydrenko.ru)
+ ********************************************************************/
+
 #ifndef _CPU_H
 #define _CPU_H
 

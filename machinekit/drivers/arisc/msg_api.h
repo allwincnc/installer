@@ -1,8 +1,16 @@
+/********************************************************************
+ * Description:  msg_api.h
+ *               Allwinner ARISC firmware MSG API
+ *
+ * Author: MX_Master (mikhail@vydrenko.ru)
+ ********************************************************************/
+
 #ifndef _MSG_API_H
 #define _MSG_API_H
 
 #include "rtapi.h"
 #include "rtapi_app.h"
+#include <unistd.h>
 #include <stdint.h>
 #include <string.h>
 #include <fcntl.h>

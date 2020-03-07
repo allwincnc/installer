@@ -1,30 +1,25 @@
 /********************************************************************
- * Description:  hal_gpio_h3.c
- *               Driver for the Orange Pi (H3 SoC) GPIO pins
+ * Description:  hal_opi_gpio.c
+ *               Driver for the Orange Pi (H3/H5) GPIO pins
  *
- * Author: Mikhail Vydrenko (mikhail@vydrenko.ru)
- *
+ * Author: MX_Master (mikhail@vydrenko.ru)
  ********************************************************************/
 
 #include "rtapi.h"          /* RTAPI realtime OS API */
 #include "rtapi_app.h"      /* RTAPI realtime module decls */
                             /* this also includes config.h */
 #include "hal.h"            /* HAL public API decls */
+
 #include <fcntl.h>
 #include <sys/mman.h>
 #include <unistd.h>
-
-
-
-#if !defined(TARGET_PLATFORM_H3)
-#error "This driver is for the H3 SoC platform only"
-#endif
+#include <string.h>
 
 
 
 
-MODULE_AUTHOR("Mikhail Vydrenko");
-MODULE_DESCRIPTION("Driver for the Orange Pi (H3 SoC) GPIO pins");
+MODULE_AUTHOR("MX_Master");
+MODULE_DESCRIPTION("Driver for the Orange Pi (H3/H5) GPIO pins");
 MODULE_LICENSE("GPL");
 
 
@@ -72,7 +67,7 @@ struct _GPIO_PORT_t
 
 
 
-static const char * comp_name = "hal_gpio_h3";
+static const char * comp_name = "opi_gpio";
 
 static struct _GPIO_PORT_REG_t * _GPIO[GPIO_PORT_COUNT] = {0};
 

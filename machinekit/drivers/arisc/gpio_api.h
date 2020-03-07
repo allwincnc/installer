@@ -1,3 +1,10 @@
+/********************************************************************
+ * Description:  gpio_api.h
+ *               Allwinner ARISC firmware GPIO API
+ *
+ * Author: MX_Master (mikhail@vydrenko.ru)
+ ********************************************************************/
+
 #ifndef _GPIO_API_H
 #define _GPIO_API_H
 
