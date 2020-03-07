@@ -1,9 +1,0 @@
-[Desktop Entry]
-Version=1.0
-Terminal=false
-Name=4D_tkemc
-Exec=linuxcnc /home/cnc/machinekit/configs/4D_tkemc/4D_tkemc.ini
-Type=Application
-Comment=Desktop Launcher for Machinekit config
-Icon=/usr/share/linuxcnc/machinekiticon.png
-Name[en_US.UTF-8]=4D_tkemc

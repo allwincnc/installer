@@ -1,0 +1,8 @@
+[Desktop Entry]
+Version=1.0
+Terminal=false
+Name=__CONFIG__
+Exec=linuxcnc /home/__USER__/__TARGET__/configs/__CONFIG__/config.ini
+Type=Application
+Comment=Desktop Launcher for __TARGET__ __CONFIG__ config
+Icon=/usr/share/linuxcnc/__TARGET__icon.png
