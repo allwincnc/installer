@@ -3,7 +3,7 @@
 # var list
       NAME="ARISC drivers"
    CUR_DIR=$(pwd)
- TARGET_ID=0
+ TARGET_ID="0"
  ALL_FILES=("allwinner_CPU.h" "arisc.gpio.h" "arisc.gpio.c" "arisc.stepgen.h" \
             "arisc.stepgen.c" "gpio_api.h"   "msg_api.h"    "stepgen_api.h")
    C_FILES=("arisc.gpio.c" "arisc.stepgen.c")
@@ -12,7 +12,7 @@
 
 
 # greetings
-echo "--- Installing '"$NAME"' -------"
+echo "--- Installing '${NAME}' -------"
 
 
 
@@ -20,15 +20,15 @@ echo "--- Installing '"$NAME"' -------"
 # select the target from the arguments list
 if [[ $# != 0 ]]; then
     for arg in $*; do
-        case $arg in
-            linuxcnc)   TARGET_ID=1; ;;
-            machinekit) TARGET_ID=2; ;;
+        case "${arg}" in
+            "linuxcnc")   TARGET_ID="1"; ;;
+            "machinekit") TARGET_ID="2"; ;;
         esac
     done
 fi
 
 # if no target selected yet
-while [[ $TARGET_ID != 1 && $TARGET_ID != 2 ]]; do
+while [[ "${TARGET_ID}" != "1" && "${TARGET_ID}" != "2" ]]; do
     echo    "Please select the target:"
     echo    "  1: for LinuxCNC"
     echo    "  2: for Machinekit"
@@ -36,7 +36,7 @@ while [[ $TARGET_ID != 1 && $TARGET_ID != 2 ]]; do
 done
 
 # set target name
-case $TARGET_ID in
+case "${TARGET_ID}" in
     1) TARGET="linuxcnc"; ;;
     2) TARGET="machinekit"; ;;
     *) TARGET="linuxcnc"; ;;
@@ -46,20 +46,20 @@ esac
 
 
 # check a folder with sources
-SRC_DIR=$TARGET"/drivers/arisc"
+SRC_DIR="${TARGET}/drivers/arisc"
 
-if [[ ! -d $SRC_DIR ]]; then
-    echo "Can't find the './"$SRC_DIR"' folder."
-    cd $CUR_DIR
+if [[ ! -d "${SRC_DIR}" ]]; then
+    echo "Can't find the './${SRC_DIR}' folder."
+    cd "${CUR_DIR}"
     exit 1
 fi
 
-cd $SRC_DIR
+cd "${SRC_DIR}"
 
 for file in ${ALL_FILES[*]}; do
-    if [[ ! -f $file ]]; then
-        echo "Can't find the './"$SRC_DIR"/"$file"' file."
-        cd $CUR_DIR
+    if [[ ! -f "${file}" ]]; then
+        echo "Can't find the './${SRC_DIR}/${file}' file."
+        cd "${CUR_DIR}"
         exit 1
     fi
 done
@@ -73,7 +73,7 @@ if [[ $(halcompile --help | grep Usage) ]]; then
 elif [[ $(comp --help | grep Usage) ]]; then
     COMPILER="comp"
 else
-    echo "Can't find a components compiler for the '"$TARGET"'."
+    echo "Can't find a components compiler for the '${TARGET}'."
     exit 1
 fi
 
@@ -84,12 +84,12 @@ fi
 echo "Compiling the drivers ..."
 
 for file in ${C_FILES[*]}; do
-    if [[ ! $(sudo $COMPILER --install $file | grep Linking) ]]; then
-        echo "Failed to compile the '"$file"' file."
+    if [[ ! $(sudo "${COMPILER}" --install "${file}" | grep Linking) ]]; then
+        echo "Failed to compile the '${file}' file."
         exit 1
     fi
 done
 
-cd $CUR_DIR
+cd "${CUR_DIR}"
 
-echo "--- The '"$NAME"' successfuly installed -------"
+echo "--- The '${NAME}' successfuly installed -------"
