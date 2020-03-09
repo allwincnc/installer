@@ -48,4 +48,4 @@ echo "Note: You must reboot the system to complete the installation"
 
 
 
-echo "--- The '${NAME}' successfuly installed -------"
+echo "--- The '${NAME}' successfully installed -------"

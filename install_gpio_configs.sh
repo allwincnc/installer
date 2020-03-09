@@ -157,4 +157,4 @@ fi
 
 
 # success
-echo "--- The '${NAME}' successfuly installed -------"
+echo "--- The '${NAME}' successfully installed -------"

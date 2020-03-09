@@ -34,4 +34,4 @@ sudo sed -i -e "s/.*GOVERNOR=.*/GOVERNOR=performance/" $F_FILE
 
 
 
-echo "--- The '${NAME}' successfuly installed -------"
+echo "--- The '${NAME}' successfully installed -------"

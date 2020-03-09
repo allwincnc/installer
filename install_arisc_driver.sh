@@ -92,4 +92,4 @@ done
 
 cd "${CUR_DIR}"
 
-echo "--- The '${NAME}' successfuly installed -------"
+echo "--- The '${NAME}' successfully installed -------"
