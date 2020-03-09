@@ -43,6 +43,8 @@ for file in ${ALL_FILES[*]}; do
     fi
 done
 
+echo "Note: You must reboot the system to complete the installation"
+
 
 
 
