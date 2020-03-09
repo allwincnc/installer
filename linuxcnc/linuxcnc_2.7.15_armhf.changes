@@ -1,0 +1,140 @@
+Format: 1.8
+Date: Thu, 02 Jan 2020 11:59:23 -0700
+Source: linuxcnc
+Binary: linuxcnc-doc-en linuxcnc-doc-es linuxcnc-doc-fr linuxcnc-uspace linuxcnc-uspace-dbgsym linuxcnc-uspace-dev
+Architecture: source all armhf
+Version: 1:2.7.15
+Distribution: unstable
+Urgency: medium
+Maintainer: Sebastian Kuzminsky <seb@highlab.com>
+Changed-By: Sebastian Kuzminsky <seb@highlab.com>
+Description:
+ linuxcnc-doc-en - motion controller for CNC machines and robots (English documentat
+ linuxcnc-doc-es - motion controller for CNC machines and robots (Spanish documentat
+ linuxcnc-doc-fr - motion controller for CNC machines and robots (French documentati
+ linuxcnc-uspace - motion controller for CNC machines and robots
+ linuxcnc-uspace-dev - motion controller for CNC machines and robots (development files)
+Changes:
+ linuxcnc (1:2.7.15) unstable; urgency=medium
+ .
+   * gaxis: use the theme that was made for it
+   * gmoccapy: fix unit change behavior (G20/G21)
+   * gmoccapy: fix offsetpage closing after editing one cell
+   * gscreen: show linked themes
+   * gscreen: fix error when selecting run-from-line startpoint
+   * gscreen: fix user message feature
+   * gladevcp: fix a bug with ProgressBar widget
+   * gladevcp: fix mode error in MDIHistory widget
+   * image-to-gcode: fix a startup crash on newer distros
+ .
+   * stepconf: fix simulated parport invert pin error
+   * pncconf: don't refer to kernel_version when not is_kernelspace (closes #159)
+   * pncconf: set PID maxerror reasonably on both imperial and metric machines
+   * pncconf: fix translations
+   * pncconf: fix maximise script for AXIS
+   * emccalib: fix parsing ini HALFILE=file items (fixes servo tuning in Axis GUI etc)
+ .
+   * hostmot2: fix a tram bug mostly affecting bspi (closes #451)
+   * pid: use command-deriv when supplied
+   * mux_generic: fix some long-standing bugs
+   * time component: add pause pin to pause timing while code is paused
+   * mb2hal: add support for libmodbus 3.1.2 and newer
+   * hy_gy_vfd: fix modbus byte timeout
+   * hm2 encoder: fix a quadrature error reporting bug
+   * hm2 sserial: fix "remote error" reporting (closes #439)
+   * hm2 muxed encoder: fix deskew bug (closes #394)
+   * mesa_uart component: fix an old bug with name handling
+ .
+   * tcl hallib: fix a bug in get_netlist
+   * vismach: fix import of ASCII STLs
+ .
+   * sample configs: add vismach 3 axis mill example
+   * sample configs: use user-friendly tool table editor
+   * sample configs: fix `ok_for_mdi()` example Python function homing check
+ .
+   * docs: fix misc typos and broken links
+   * docs: [TRAJ]LINEAR_UNITS must be either mm or inch
+   * docs: pwmgen has all pins now, no params
+   * docs: improve lowpass manpage
+   * docs: improve vismach example
+   * docs: improve pyvcp container info
+   * docs: add a pyvcp example
+   * docs: fix incorrect pin names in hostmot2 manpage
+   * docs: improve O-word examples & docs
+   * docs: fix & improve G28, G30, and G92
+   * docs: improve G38 & probe result params
+   * docs: improve restart description in M0/M1 docs
+   * docs: improve M7, M8, and M9
+   * docs: add a link to the web forum to About LinuxCNC
+   * docs: fix command for launching pyvcp example
+   * docs: add component usage information to halcomp docs
+   * docs: add arc tolerance ini settings
+   * docs: improve backlash & screw compensation docs
+   * docs: improve python UI library docs
+   * docs: fix #<_coord_system> values
+   * docs: fix indentation in remap docs example
+   * docs: fix broken link in comments of comp311.ngc example program
+   * docs: add missing info about motion.motion-type to Core Componens
+   * docs: clarify o-word subroutine effects
+   * docs: update links to point at new Wheezy ISO
+   * docs: fix a broken link in French docs
+   * docs: fix German translation (fixes #597)
+   * docs: fix homing docs about HOME_FINAL_VEL
+ .
+   * Interp: fix MDI calls after sub updated (fixes #455)
+   * Interp: fix motion after Abort (fixes #579)
+ .
+   * TP: fix fallback to parabolic blending when tangent blend fails (fixes #477)
+   * TP: fix accel violation with G96 and arc blending
+   * TP: fix exact-stop when falling back to alternative blend methods
+   * TP: fix accel violations with near-tangent segments (fixes #546)
+   * TP: apply minimum displacement checks consistently (fixes #550)
+ .
+   * RTAPI: allow rtapi to compile with kernel 4.14+
+ .
+   * make better use of autoconfigured `grep` executable in scripts
+   * scripts/linuxcnc: run better in Docker
+   * scripts/linuxcnc: fix cleanup log messages
+ .
+   * simulate_probe: rebrand EMC -> LinuxCNC in error messages
+ .
+   * clean up and modernize out use of yapps (for halcompile)
+   * better build & packaging support for Debian 10 "Buster"
+   * packaging: don't depend on python-gnome2
+   * remove unused program halgui
+   * fix compile error in C99 mode
+   * build system: require `intltool-extract` executable
+   * build system: support Ubuntu 16.04 and 18.04, and LinuxMint 18.* and 19.*
+   * tests: add an Interp test of G33.1
+   * tests: add an Interp test for issue #455
+   * travis: use ccache
+Checksums-Sha1:
+ 472464d32373cd89f65edc8323387c00a529d7be 1537 linuxcnc_2.7.15.dsc
+ 997cdb7e67601a116c6d9ebc1e80ebd1d347785f 20945196 linuxcnc_2.7.15.tar.xz
+ 11bb0ae3bf19eb2616f42e8b50a85638d26c0bc6 12238824 linuxcnc-doc-en_2.7.15_all.deb
+ 0e91ffea4843334989a399a18920e0d8bb6bd3a9 11361536 linuxcnc-doc-es_2.7.15_all.deb
+ 8809b1589c0f151e0f1c4451d165f67a26a68b4b 6260328 linuxcnc-doc-fr_2.7.15_all.deb
+ 5a41748bf0cc81c18214b814d1b1ac0ba5e7ddbd 10401112 linuxcnc-uspace-dbgsym_2.7.15_armhf.deb
+ 1fd875b6f22adf688c26a529a8f62af78ff13348 620992 linuxcnc-uspace-dev_2.7.15_armhf.deb
+ 4a7fe2fe5b8a88b2e9e3c47c15af6351fc610f9b 3607904 linuxcnc-uspace_2.7.15_armhf.deb
+ 9dc6f8cd33c3965695574f669e393772a65b0961 22314 linuxcnc_2.7.15_armhf.buildinfo
+Checksums-Sha256:
+ a2b188b806fa6739f62d94bf7e6655392c1604dd5c0b6e0d808205dc40edeae5 1537 linuxcnc_2.7.15.dsc
+ fac000886b36960c982bdff6b390c1fa4574d867fdb9ec67d6879898ef8338ef 20945196 linuxcnc_2.7.15.tar.xz
+ 0709e286e410f79e465f06ef5730b51170e092258ae93a1ede2df3a177fecf0c 12238824 linuxcnc-doc-en_2.7.15_all.deb
+ f2264d898cda8884bb13c97892e6872747a7f3cac90a7a86782c3a24d32f1445 11361536 linuxcnc-doc-es_2.7.15_all.deb
+ 3af35a38f1a794600a2b5d104b45dc9bb8bd334033f116708ce2dc83dec4c73d 6260328 linuxcnc-doc-fr_2.7.15_all.deb
+ a45c6b3ca8b99c691ee6781a977a220e3840fe98fcdc69b2f5b2ca1431cadfd1 10401112 linuxcnc-uspace-dbgsym_2.7.15_armhf.deb
+ 1ab641540a55ea4b77bc0fa1ef95f71ea7fbdcfb03a492c32b7653b90c47f19b 620992 linuxcnc-uspace-dev_2.7.15_armhf.deb
+ 166d52d598f4c06967bd233400152f019002460ed3a249ac1fa80de4f5509a9d 3607904 linuxcnc-uspace_2.7.15_armhf.deb
+ 3490c7db14d4c07e98fff65141de925bceaafa9df296f1823302cd9993414244 22314 linuxcnc_2.7.15_armhf.buildinfo
+Files:
+ 7d97afed4c8c8f8df994e6c7d2ed8625 1537 misc extra linuxcnc_2.7.15.dsc
+ cdc725f89b3039e470186f758285c64b 20945196 misc extra linuxcnc_2.7.15.tar.xz
+ 131b11276b4736424a30d9e2f3a03253 12238824 misc extra linuxcnc-doc-en_2.7.15_all.deb
+ 050d8bc3e304feb8526a5b46fa5ef01c 11361536 misc extra linuxcnc-doc-es_2.7.15_all.deb
+ bc8974303dd43ee3e2b5b0675cd2f6c3 6260328 misc extra linuxcnc-doc-fr_2.7.15_all.deb
+ 14d220d25640094462d008ebbdc6082c 10401112 debug optional linuxcnc-uspace-dbgsym_2.7.15_armhf.deb
+ aefe9394e432f80c52dcd67995010a4b 620992 libs extra linuxcnc-uspace-dev_2.7.15_armhf.deb
+ 846dba276205966659058a43b0c112cd 3607904 misc extra linuxcnc-uspace_2.7.15_armhf.deb
+ a134f09a8138f799b4a86259d7c93720 22314 misc extra linuxcnc_2.7.15_armhf.buildinfo
