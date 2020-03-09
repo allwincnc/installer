@@ -17,12 +17,12 @@ echo "--- Installing '${NAME}' -------"
 
 # check a folders
 if [[ ! -d "${SRC_DIR}" ]]; then
-    echo "Can't find the '${SRC_DIR}' folder."
+    echo "ERROR: Can't find the '${SRC_DIR}' folder (${0}:${LINENO})."
     exit 1
 fi
 
 if [[ ! -d "${DST_DIR}" ]]; then
-    echo "Can't find the '${DST_DIR}' folder."
+    echo "ERROR: Can't find the '${DST_DIR}' folder (${0}:${LINENO})."
     exit 1
 fi
 
@@ -32,13 +32,13 @@ fi
 # check/copy files
 for file in ${ALL_FILES[*]}; do
     if [[ ! -f "${SRC_DIR}/${file}" ]]; then
-        echo "Can't find the '${SRC_DIR}/${file}' file."
+        echo "ERROR: Can't find the '${SRC_DIR}/${file}' file (${0}:${LINENO})."
         exit 1
     fi
 
     sudo cp -f "${SRC_DIR}/${file}" "${DST_DIR}/${file}"
     if [[ ! -f "${DST_DIR}/${file}" ]]; then
-        echo "Can't create the '${DST_DIR}/${file}' file."
+        echo "ERROR: Can't create the '${DST_DIR}/${file}' file (${0}:${LINENO})."
         exit 1
     fi
 done

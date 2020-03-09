@@ -50,7 +50,7 @@ SRC_DIR="${TARGET}/configs"
 DST_DIR="${HOME}/${TARGET}/configs"
 
 if [[ ! -d "${SRC_DIR}" ]]; then
-    echo "Can't find the './${SRC_DIR}' folder."
+    echo "ERROR: Can't find the './${SRC_DIR}' folder (${0}:${LINENO})."
     exit 1
 fi
 
@@ -58,7 +58,7 @@ if [[ ! -d "${HOME}/${TARGET}" ]]; then
     mkdir "${HOME}/${TARGET}"
 fi
 if [[ ! -d "${HOME}/${TARGET}" ]]; then
-    echo "Can't create the '${HOME}/${TARGET}' folder."
+    echo "ERROR: Can't create the '${HOME}/${TARGET}' folder (${0}:${LINENO})."
     exit 1
 fi
 
@@ -66,7 +66,7 @@ if [[ ! -d "${DST_DIR}" ]]; then
     mkdir "${DST_DIR}"
 fi
 if [[ ! -d "${DST_DIR}" ]]; then
-    echo "Can't create the '~/${DST_DIR}' folder."
+    echo "ERROR: Can't create the '~/${DST_DIR}' folder (${0}:${LINENO})."
     exit 1
 fi
 
@@ -86,14 +86,14 @@ for config in ${ALL_DIRS[*]}; do
     
     # check folders
     if [[ ! -d "${SRC_CFG_DIR}" ]]; then
-        echo "Can't find the '${SRC_CFG_DIR}' folder."
+        echo "ERROR: Can't find the '${SRC_CFG_DIR}' folder (${0}:${LINENO})."
         exit 1
     fi
     if [[ ! -d "${DST_CFG_DIR}" ]]; then
         mkdir "${DST_CFG_DIR}"
     fi
     if [[ ! -d "${DST_CFG_DIR}" ]]; then
-        echo "Can't create the '${DST_CFG_DIR}' folder."
+        echo "ERROR: Can't create the '${DST_CFG_DIR}' folder (${0}:${LINENO})."
         exit 1
     fi
 
@@ -103,14 +103,14 @@ for config in ${ALL_DIRS[*]}; do
         DST_CFG_FILE="${DST_CFG_DIR}/${file}"
         
         if [[ ! -f "${SRC_CFG_FILE}" ]]; then
-            echo "Can't find the '${SRC_CFG_FILE}' file."
+            echo "ERROR: Can't find the '${SRC_CFG_FILE}' file (${0}:${LINENO})."
             exit 1
         fi
         
         # copy file
         cp -f "${SRC_CFG_FILE}" "${DST_CFG_FILE}"
         if [[ ! -f "${DST_CFG_FILE}" ]]; then
-            echo "Can't create the '${DST_CFG_FILE}' file."
+            echo "ERROR: Can't create the '${DST_CFG_FILE}' file (${0}:${LINENO})."
             exit 1
         fi
         
@@ -127,7 +127,7 @@ for config in ${ALL_DIRS[*]}; do
         # copy link template
         cp -f "${DSK_TPL_FILE}" "${DSK_LINK_FILE}"
         if [[ ! -f "${DSK_LINK_FILE}" ]]; then
-            echo "Can't create the '${DSK_LINK_FILE}' file."
+            echo "ERROR: Can't create the '${DSK_LINK_FILE}' file (${0}:${LINENO})."
             exit 1
         fi
         chmod +x "${DSK_LINK_FILE}"
@@ -150,7 +150,7 @@ if [[ ! -L "${DSK_CFG_DIR_LINK}" ]]; then
 fi
 
 if [[ ! -L "${DSK_CFG_DIR_LINK}" ]]; then
-    echo "Can't create the '${DSK_CFG_DIR_LINK}' link."
+    echo "ERROR: Can't create the '${DSK_CFG_DIR_LINK}' link (${0}:${LINENO})."
 fi
 
 
