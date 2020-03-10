@@ -115,13 +115,20 @@ done
 
 
 # check CPU arch
-for arch in ${DST_ARCH[*]}; do
-    if [[ ! $(uname -m | grep "${arch}") ]]; then
-        echo "Supported CPU types: ${DST_ARCH[*]}"
-        echo "ERROR: Your CPU type ($(uname -m)) isn't supported (${0}:${LINENO})."
-        exit 1
+supported=""
+
+for item in ${DST_ARCH[*]}; do
+    if [[ $(uname -m | grep "${item}") ]]; then
+        supported="1"
+        break
     fi
 done
+
+if [[ ! $supported ]]; then
+    echo "Supported CPU types: ${DST_ARCH[*]}"
+    echo "ERROR: Your CPU type ($(uname -m)) isn't supported (${0}:${LINENO})."
+    exit 1
+fi
 
 
 
