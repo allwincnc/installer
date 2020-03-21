@@ -81,7 +81,9 @@ if [[ -f $MAIN_PKG ]]; then
     sudo apt install $MAIN_PKG -qq
 fi
 
-if [[ ! $(uname -v | grep "PREEMPT.*RT") ]]; then
+version=$(dpkg-deb -I "$MAIN_PKG" | grep "Source:" | grep -P -o "[0-9]+\.[0-9]+\.[0-9]+\-\w+\-\w+")
+
+if [[ ! -f "/boot/vmlinuz-${version}" ]]; then
     echo "ERROR: Failed to install '${MAIN_PKG}' package (${0}:${LINENO})."
     exit 1
 fi
@@ -92,9 +94,9 @@ if [[ -f $HEAD_PKG ]]; then
     sudo apt install $HEAD_PKG -qq
 fi
 
-package=$(dpkg-deb -I "$HEAD_PKG" | grep -P -o "[\w\-]+headers[\w\-]+)
+version=$(dpkg-deb -I "$HEAD_PKG" | grep "Source:" | grep -P -o "[0-9]+\.[0-9]+\.[0-9]+\-\w+\-\w+")
 
-if [[ ! -d "/usr/src/$package" ]]; then
+if [[ ! -d "/usr/src/linux-headers-${version}" ]]; then
     echo "WARNING: Failed to install '${HEAD_PKG}' package (${0}:${LINENO})."
 fi
 
