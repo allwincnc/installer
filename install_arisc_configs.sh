@@ -161,3 +161,4 @@ fi
 
 # success
 log "--- The **$NAME** was ++successfully installed++ -------"
+log ""
