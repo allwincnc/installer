@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source tools.sh
+
 # var list
    NAME="orangecnc"
     ERR="0"
@@ -19,11 +21,11 @@
 
 
 # greetings
-echo ""
-echo "--------------------------------------------------------------"
-echo "--- Installing '${NAME}' -------"
-echo "--------------------------------------------------------"
-echo ""
+log ""
+log "--------------------------------------------------------------"
+log "--- Installing **${NAME}** -------"
+log "--------------------------------------------------------"
+log ""
 
 
 
@@ -43,12 +45,14 @@ done
 
 
 # results
-echo     ""
-echo     "--------------------------------------------------------"
+log     ""
+log     "--------------------------------------------------------"
 if [[ $ERR == "0" ]]; then
-    echo "--- The '${NAME}' successfully installed -------"
+    log "--- The **${NAME}** was ++successfully installed++ -------"
+    log "--- reboot the device to complete the installation -------"
 else
-    echo "--- The '${NAME}' installed with errors -------"
+    log "--- The **${NAME}** installed with !!errors!! -------"
+    log "--- see the **$logFILE** file for details -------"
 fi
-echo     "--------------------------------------------------------------"
-echo     ""
+log     "--------------------------------------------------------------"
+log     ""

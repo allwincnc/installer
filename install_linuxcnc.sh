@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source tools.sh
+
 # var list
       NAME="LinuxCNC"
    VERSION=""
@@ -27,7 +29,8 @@
 
 
 # greetings
-echo "--- Installing '${NAME}' -------"
+log ""
+log "--- Installing **${NAME}** -------"
 
 
 
@@ -45,9 +48,9 @@ fi
 # if no VERSION selected yet
 while [[ "${VERSION}" != "1"   && "${VERSION}" != "2" && \
          "${VERSION}" != "2.7" && "${VERSION}" != "2.8" ]]; do
-    echo    "Please select the ${NAME} version:"
-    echo    "  1: LinuxCNC 2.7"
-    echo    "  2: LinuxCNC 2.8"
+    log     "Please select the ${NAME} version:"
+    log     "  1: LinuxCNC 2.7"
+    log     "  2: LinuxCNC 2.8"
     read -p "Version: " VERSION
 done
 
@@ -77,10 +80,10 @@ fi
 # if no language for documentation selected yet
 while [[ "${DOC_LNG}" != "1"  && "${DOC_LNG}" != "2"  && "${DOC_LNG}" != "3" && \
          "${DOC_LNG}" != "en" && "${DOC_LNG}" != "es" && "${DOC_LNG}" != "fr" ]]; do
-    echo    "Please select the language for documentation:"
-    echo    "  1: English"
-    echo    "  2: Spanish"
-    echo    "  3: French"
+    log     "Please select the language for documentation:"
+    log     "  1: English"
+    log     "  2: Spanish"
+    log     "  3: French"
     read -p "Language for docs: " DOC_LNG
 done
 
@@ -100,13 +103,13 @@ esac
 
 # check folders/files
 if [[ ! -d "${SRC_DIR}" ]]; then
-    echo "ERROR: Can't find the '${SRC_DIR}' folder (${0}:${LINENO})."
+    log "!!ERROR!!: Can't find the **${SRC_DIR}** folder [**${0}:${LINENO}**]."
     exit 1
 fi
 
 for file in ${ALL_FILES[*]}; do
     if [[ ! -f "${SRC_DIR}/${file}" ]]; then
-        echo "ERROR: Can't find the '${SRC_DIR}/${file}' file (${0}:${LINENO})."
+        log "!!ERROR!!: Can't find the **${SRC_DIR}/${file}** file [**${0}:${LINENO}**]."
         exit 1
     fi
 done
@@ -125,8 +128,8 @@ for item in ${DST_ARCH[*]}; do
 done
 
 if [[ ! $supported ]]; then
-    echo "Supported CPU types: ${DST_ARCH[*]}"
-    echo "ERROR: Your CPU type ($(uname -m)) isn't supported (${0}:${LINENO})."
+    log "Supported CPU types: ${DST_ARCH[*]}"
+    log "!!ERROR!!: Your CPU type (**$(uname -m)**) isn't supported [**${0}:${LINENO}**]."
     exit 1
 fi
 
@@ -156,38 +159,38 @@ DOC_PKG=$SRC_DIR"/"$(echo "$ALL_PKGS" | grep "doc-${DOC_LNG}_$VERSION")
 
 
 # installing packages
-echo "Installing packages ..."
+log "Installing packages ..."
 
-echo "Installing '$MAIN_PKG' ..."
+log "Installing **$MAIN_PKG** ..."
 if [[ -f $MAIN_PKG ]]; then
     sudo apt install $MAIN_PKG -qq
 fi
 if [[ ! $(linuxcnc -help | grep Usage) ]]; then
-    echo "ERROR: Failed to install '${MAIN_PKG}' package (${0}:${LINENO})."
+    log "!!ERROR!!: Failed to install **${MAIN_PKG}** package [**${0}:${LINENO}**]."
     exit 1
 fi
 
-echo "Installing '$DEV_PKG' ..."
+log "Installing **$DEV_PKG** ..."
 if [[ -f $DEV_PKG ]]; then
     sudo apt install $DEV_PKG -qq
 fi
 if [[ ! $(halcompile --help | grep Usage) ]]; then
-    echo "ERROR: Failed to install '${DEV_PKG}' package (${0}:${LINENO})."
+    log "!!ERROR!!: Failed to install **${DEV_PKG}** package [**${0}:${LINENO}**]."
     exit 1
 fi
 
-#echo "Installing '$DBG_PKG' ..."
+#echo "Installing **$DBG_PKG** ..."
 #
 #if [[ -f $DBG_PKG ]]; then
 #    sudo apt -y install $DBG_PKG
 #fi
 
-echo "Installing '$DOC_PKG' ..."
+log "Installing **$DOC_PKG** ..."
 if [[ -f $DOC_PKG ]]; then
     sudo apt install $DOC_PKG -qq
 fi
 if [[ ! -d "${DOC_DIR}" ]]; then
-    echo "WARNING: Documentation folder '${DOC_DIR}' isn't found (${0}:${LINENO})."
+    log "WARNING: Documentation folder **${DOC_DIR}** isn't found [**${0}:${LINENO}**]."
 else
     docs_files_ok=""
     case $DOC_LNG in
@@ -203,11 +206,12 @@ else
               fi ;;
     esac
     if [[ ! $docs_files_ok ]]; then
-        echo "WARNING: Documentation files isn't found (${0}:${LINENO})."
+        log "WARNING: Documentation files isn't found [**${0}:${LINENO}**]."
     fi
 fi
 
 
 
 
-echo "--- The '${NAME}' successfully installed -------"
+log "--- The **${NAME}** was ++successfully installed++ -------"
+log ""

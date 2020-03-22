@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source tools.sh
+
 # var list
       NAME="GPIO configs"
  TARGET_ID="0"
@@ -12,7 +14,8 @@
 
 
 # greetings
-echo "--- Installing '${NAME}' -------"
+log ""
+log "--- Installing **${NAME}** -------"
 
 
 
@@ -29,9 +32,9 @@ fi
 
 # if no target selected yet
 while [[ "${TARGET_ID}" != "1" && "${TARGET_ID}" != "2" ]]; do
-    echo    "Please select the target:"
-    echo    "  1: for LinuxCNC"
-    echo    "  2: for Machinekit"
+    log     "Please select the target:"
+    log     "  1: for LinuxCNC"
+    log     "  2: for Machinekit"
     read -p "Target: " TARGET_ID
 done
 
@@ -50,7 +53,7 @@ SRC_DIR="${TARGET}/configs"
 DST_DIR="${HOME}/${TARGET}/configs"
 
 if [[ ! -d "${SRC_DIR}" ]]; then
-    echo "ERROR: Can't find the './${SRC_DIR}' folder (${0}:${LINENO})."
+    log "!!ERROR!!: Can't find the **./${SRC_DIR}** folder [**${0}:${LINENO}**]."
     exit 1
 fi
 
@@ -58,7 +61,7 @@ if [[ ! -d "${HOME}/${TARGET}" ]]; then
     mkdir "${HOME}/${TARGET}"
 fi
 if [[ ! -d "${HOME}/${TARGET}" ]]; then
-    echo "ERROR: Can't create the '${HOME}/${TARGET}' folder (${0}:${LINENO})."
+    log "!!ERROR!!: Can't create the **${HOME}/${TARGET}** folder [**${0}:${LINENO}**]."
     exit 1
 fi
 
@@ -66,7 +69,7 @@ if [[ ! -d "${DST_DIR}" ]]; then
     mkdir "${DST_DIR}"
 fi
 if [[ ! -d "${DST_DIR}" ]]; then
-    echo "ERROR: Can't create the '~/${DST_DIR}' folder (${0}:${LINENO})."
+    log "!!ERROR!!: Can't create the **~/${DST_DIR}** folder [**${0}:${LINENO}**]."
     exit 1
 fi
 
@@ -86,14 +89,14 @@ for config in ${ALL_DIRS[*]}; do
     
     # check folders
     if [[ ! -d "${SRC_CFG_DIR}" ]]; then
-        echo "ERROR: Can't find the '${SRC_CFG_DIR}' folder (${0}:${LINENO})."
+        log "!!ERROR!!: Can't find the **${SRC_CFG_DIR}** folder [**${0}:${LINENO}**]."
         exit 1
     fi
     if [[ ! -d "${DST_CFG_DIR}" ]]; then
         mkdir "${DST_CFG_DIR}"
     fi
     if [[ ! -d "${DST_CFG_DIR}" ]]; then
-        echo "ERROR: Can't create the '${DST_CFG_DIR}' folder (${0}:${LINENO})."
+        log "!!ERROR!!: Can't create the **${DST_CFG_DIR}** folder [**${0}:${LINENO}**]."
         exit 1
     fi
 
@@ -103,14 +106,14 @@ for config in ${ALL_DIRS[*]}; do
         DST_CFG_FILE="${DST_CFG_DIR}/${file}"
         
         if [[ ! -f "${SRC_CFG_FILE}" ]]; then
-            echo "ERROR: Can't find the '${SRC_CFG_FILE}' file (${0}:${LINENO})."
+            log "!!ERROR!!: Can't find the **${SRC_CFG_FILE}** file [**${0}:${LINENO}**]."
             exit 1
         fi
         
         # copy file
         cp -f "${SRC_CFG_FILE}" "${DST_CFG_FILE}"
         if [[ ! -f "${DST_CFG_FILE}" ]]; then
-            echo "ERROR: Can't create the '${DST_CFG_FILE}' file (${0}:${LINENO})."
+            log "!!ERROR!!: Can't create the **${DST_CFG_FILE}** file [**${0}:${LINENO}**]."
             exit 1
         fi
         
@@ -127,7 +130,7 @@ for config in ${ALL_DIRS[*]}; do
         # copy link template
         cp -f "${DSK_TPL_FILE}" "${DSK_LINK_FILE}"
         if [[ ! -f "${DSK_LINK_FILE}" ]]; then
-            echo "ERROR: Can't create the '${DSK_LINK_FILE}' file (${0}:${LINENO})."
+            log "!!ERROR!!: Can't create the **${DSK_LINK_FILE}** file [**${0}:${LINENO}**]."
             exit 1
         fi
         chmod +x "${DSK_LINK_FILE}"
@@ -150,11 +153,12 @@ if [[ ! -L "${DSK_CFG_DIR_LINK}" ]]; then
 fi
 
 if [[ ! -L "${DSK_CFG_DIR_LINK}" ]]; then
-    echo "ERROR: Can't create the '${DSK_CFG_DIR_LINK}' link (${0}:${LINENO})."
+    log "!!ERROR!!: Can't create the **${DSK_CFG_DIR_LINK}** link [**${0}:${LINENO}**]."
 fi
 
 
 
 
 # success
-echo "--- The '${NAME}' successfully installed -------"
+log "--- The **${NAME}** was ++successfully installed++ -------"
+log ""

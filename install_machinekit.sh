@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source tools.sh
+
 # var list
       NAME="Machinekit"
   SRC_ARCH=("armhf")
@@ -13,7 +15,8 @@
 
 
 # greetings
-echo "--- Installing '${NAME}' -------"
+log ""
+log "--- Installing **${NAME}** -------"
 
 
 
@@ -29,8 +32,8 @@ for item in ${DST_ARCH[*]}; do
 done
 
 if [[ ! $supported ]]; then
-    echo "Supported CPU types: ${DST_ARCH[*]}"
-    echo "ERROR: Your CPU type ($(uname -m)) isn't supported (${0}:${LINENO})."
+    log "Supported CPU types: **${DST_ARCH[*]}**"
+    log "!!ERROR!!: Your CPU type (**$(uname -m)**) isn't supported [**${0}:${LINENO}**]."
     exit 1
 fi
 
@@ -49,8 +52,8 @@ for item in ${DST_OS[*]}; do
 done
 
 if [[ ! $supported ]]; then
-    echo "Supported OS types: ${DST_OS[*]}"
-    echo "ERROR: Your OS type ($(lsb_release -c)) isn't supported (${0}:${LINENO})."
+    log "Supported OS types: ${DST_OS[*]}"
+    log "!!ERROR!!: Your OS type (**$(lsb_release -c)**) isn't supported [**${0}:${LINENO}**]."
     exit 1
 fi
 
@@ -71,7 +74,7 @@ sudo apt update
 sudo apt install machinekit-rt-preempt -qq
 
 if [[ ! $(machinekit -help | grep Usage) ]]; then
-    echo "ERROR: Failed to install 'machinekit-rt-preempt' package (${0}:${LINENO})."
+    log "!!ERROR!!: Failed to install **machinekit-rt-preempt** package [**${0}:${LINENO}**]."
     exit 1
 fi
 
@@ -80,4 +83,5 @@ sudo apt install machinekit-manual-pages -qq
 
 
 
-echo "--- The '${NAME}' successfully installed -------"
+log "--- The **${NAME}** was ++successfully installed++ -------"
+log ""

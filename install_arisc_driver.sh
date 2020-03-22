@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source tools.sh
+
 # var list
       NAME="ARISC drivers"
    CUR_DIR=$(pwd)
@@ -12,7 +14,8 @@
 
 
 # greetings
-echo "--- Installing '${NAME}' -------"
+log ""
+log "--- Installing **${NAME}** -------"
 
 
 
@@ -29,9 +32,9 @@ fi
 
 # if no target selected yet
 while [[ "${TARGET_ID}" != "1" && "${TARGET_ID}" != "2" ]]; do
-    echo    "Please select the target:"
-    echo    "  1: for LinuxCNC"
-    echo    "  2: for Machinekit"
+    log     "Please select the target:"
+    log     "  1: for LinuxCNC"
+    log     "  2: for Machinekit"
     read -p "Target: " TARGET_ID
 done
 
@@ -49,7 +52,7 @@ esac
 SRC_DIR="${TARGET}/drivers/arisc"
 
 if [[ ! -d "${SRC_DIR}" ]]; then
-    echo "ERROR: Can't find the './${SRC_DIR}' folder (${0}:${LINENO})."
+    log "!!ERROR!!: Can't find the **./${SRC_DIR}** folder [**${0}:${LINENO}**]."
     cd "${CUR_DIR}"
     exit 1
 fi
@@ -58,7 +61,7 @@ cd "${SRC_DIR}"
 
 for file in ${ALL_FILES[*]}; do
     if [[ ! -f "${file}" ]]; then
-        echo "ERROR: Can't find the './${SRC_DIR}/${file}' file (${0}:${LINENO})."
+        log "!!ERROR!!: Can't find the **./${SRC_DIR}/${file}** file [**${0}:${LINENO}**]."
         cd "${CUR_DIR}"
         exit 1
     fi
@@ -73,7 +76,7 @@ if [[ $(halcompile --help | grep Usage) ]]; then
 elif [[ $(comp --help | grep Usage) ]]; then
     COMPILER="comp"
 else
-    echo "ERROR: Can't find a components compiler for the '${TARGET}' (${0}:${LINENO})."
+    log "!!ERROR!!: Can't find a components compiler for the **${TARGET}** [**${0}:${LINENO}**]."
     exit 1
 fi
 
@@ -81,15 +84,16 @@ fi
 
 
 # compiling the driver
-echo "Compiling the drivers ..."
+log "Compiling the drivers ..."
 
 for file in ${C_FILES[*]}; do
     if [[ ! $(sudo "${COMPILER}" --install "${file}" | grep Linking) ]]; then
-        echo "ERROR: Failed to compile the '${file}' file (${0}:${LINENO})."
+        log "!!ERROR!!: Failed to compile the **${file}** file [**${0}:${LINENO}**]."
         exit 1
     fi
 done
 
 cd "${CUR_DIR}"
 
-echo "--- The '${NAME}' successfully installed -------"
+log "--- The **${NAME}** was ++successfully installed++ -------"
+log ""

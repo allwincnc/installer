@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source tools.sh
+
 # var list
       NAME="PREEMPT RT kernel"
    SRC_DIR="./armbian/preempt_rt_kernel"
@@ -13,20 +15,21 @@
 
 
 # greetings
-echo "--- Installing '${NAME}' -------"
+log ""
+log "--- Installing **${NAME}** -------"
 
 
 
 
 # check folders/files
 if [[ ! -d "${SRC_DIR}" ]]; then
-    echo "ERROR: Can't find the '${SRC_DIR}' folder (${0}:${LINENO})."
+    log "!!ERROR!!: Can't find the **${SRC_DIR}** folder [**${0}:${LINENO}**]."
     exit 1
 fi
 
 for file in ${ALL_FILES[*]}; do
     if [[ ! -f "${SRC_DIR}/${file}" ]]; then
-        echo "ERROR: Can't find the '${SRC_DIR}/${file}' file (${0}:${LINENO})."
+        log "!!ERROR!!: Can't find the **${SRC_DIR}/${file}** file [**${0}:${LINENO}**]."
         exit 1
     fi
 done
@@ -45,8 +48,8 @@ for item in ${DST_ARCH[*]}; do
 done
 
 if [[ ! $supported ]]; then
-    echo "Supported CPU types: ${DST_ARCH[*]}"
-    echo "ERROR: Your CPU type ($(uname -m)) isn't supported (${0}:${LINENO})."
+    log "Supported CPU types: **${DST_ARCH[*]}**"
+    log "!!ERROR!!: Your CPU type (**$(uname -m)**) isn't supported [**${0}:${LINENO}**]."
     exit 1
 fi
 
@@ -73,9 +76,9 @@ HEAD_PKG=$SRC_DIR"/"$(echo "$ARCH_PKGS" | grep "headers")
 
 
 # installing packages
-echo "Installing packages ..."
+log "Installing packages ..."
 
-echo "Installing '$MAIN_PKG' ..."
+log "Installing **$MAIN_PKG** ..."
 
 if [[ -f $MAIN_PKG ]]; then
     sudo apt install $MAIN_PKG -qq
@@ -84,11 +87,11 @@ fi
 version=$(dpkg-deb -I "$MAIN_PKG" | grep "Source:" | grep -P -o "[0-9]+\.[0-9]+\.[0-9]+\-\w+\-\w+")
 
 if [[ ! -f "/boot/vmlinuz-${version}" ]]; then
-    echo "ERROR: Failed to install '${MAIN_PKG}' package (${0}:${LINENO})."
+    log "!!ERROR!!: Failed to install **${MAIN_PKG}** package [**${0}:${LINENO}**]."
     exit 1
 fi
 
-echo "Installing '$HEAD_PKG' ..."
+log "Installing **$HEAD_PKG** ..."
 
 if [[ -f $HEAD_PKG ]]; then
     sudo apt install $HEAD_PKG -qq
@@ -97,12 +100,13 @@ fi
 version=$(dpkg-deb -I "$HEAD_PKG" | grep "Source:" | grep -P -o "[0-9]+\.[0-9]+\.[0-9]+\-\w+\-\w+")
 
 if [[ ! -d "/usr/src/linux-headers-${version}" ]]; then
-    echo "WARNING: Failed to install '${HEAD_PKG}' package (${0}:${LINENO})."
+    log "WARNING: Failed to install **${HEAD_PKG}** package [**${0}:${LINENO}**]."
 fi
 
-echo "NOTE: You must reboot the system to complete the installation"
+log "@@NOTE@@: You must reboot the system to complete the installation"
 
 
 
 
-echo "--- The '${NAME}' successfully installed -------"
+log "--- The **${NAME}** was ++successfully installed++ -------"
+log ""
