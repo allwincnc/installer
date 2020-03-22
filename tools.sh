@@ -11,8 +11,10 @@
 
 
 
-# cleanup the log file
-echo "" > $logFILE
+# touch the log file
+touch $logFILE
+echo "" >> $logFILE
+echo "DATE: $(date)" >> $logFILE
 
 # logging tool
 function log() {
