@@ -15,6 +15,7 @@
 #include <string.h>
 #include <fcntl.h>
 #include <sys/mman.h>
+#include <sys/fsuid.h>
 
 #include "allwinner_CPU.h"
 
@@ -77,11 +78,15 @@ int32_t msg_mem_init
                                  MSG_BLOCK_SIZE;
 
     // open physical memory file
+    seteuid(0);
+    setfsuid( geteuid() );
     if ( (mem_fd = open("/dev/mem", O_RDWR|O_SYNC) ) < 0 )
     {
+        setfsuid( getuid() );
         rtapi_print_msg(RTAPI_MSG_ERR, "%s: [MSG] can't open /dev/mem file\n", comp_name);
         return -1;
     }
+    setfsuid( getuid() );
 
     // calculate phy memory block start
     vrt_offset = msg_block_addr % PHY_MEM_BLOCK_SIZE;
