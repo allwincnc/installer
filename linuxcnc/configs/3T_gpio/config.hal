@@ -1,3 +1,4 @@
+loadrt trivkins
 loadrt [EMCMOT]EMCMOT base_period_nsec=[EMCMOT]BASE_PERIOD servo_period_nsec=[EMCMOT]SERVO_PERIOD num_joints=[TRAJ]AXES
 loadrt opi_gpio output_pins=3,5,7,8,10,11,12,13,15,16
 loadrt stepgen step_type=0,0,0

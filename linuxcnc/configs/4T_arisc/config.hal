@@ -29,6 +29,7 @@
 
 # load realtime components and drivers
 
+loadrt trivkins
 loadrt [EMCMOT]EMCMOT base_period_nsec=[EMCMOT]BASE_PERIOD servo_period_nsec=[EMCMOT]SERVO_PERIOD num_joints=[TRAJ]AXES
 loadrt arisc.gpio     CPU=H3 in=PA13,PA14,PD14,PC4 out=PC2,PA19,PA7,PA8
 loadrt arisc.stepgen  CPU=H3 ctrl_type=p,p,p,p
