@@ -12,6 +12,7 @@
 
 #include <fcntl.h>
 #include <sys/mman.h>
+#include <sys/fsuid.h>
 #include <unistd.h>
 #include <string.h>
 
@@ -236,12 +237,16 @@ int32_t rtapi_app_main(void)
 
 
     // open physical memory file
+    seteuid(0);
+    setfsuid( geteuid() );
     if ( (mem_fd = open("/dev/mem", O_RDWR|O_SYNC) ) < 0 )
     {
-       rtapi_print_msg(RTAPI_MSG_ERR,
+        setfsuid( getuid() );
+        rtapi_print_msg(RTAPI_MSG_ERR,
                        "%s: ERROR: can't open /dev/mem file\n", comp_name);
-       return -1;
+        return -1;
     }
+    setfsuid( getuid() );
 
     // calculate phy memory block start
     vrt_offset = GPIO_PHY_MEM_OFFSET1 % PHY_MEM_BLOCK_SIZE;

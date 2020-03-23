@@ -1,5 +1,5 @@
 /********************************************************************
- * Description:  arisc.stepgen.c
+ * Description:  arisc_stepgen.c
  *               STEPGEN driver for the Allwinner ARISC firmware
  *
  * Author: MX_Master (mikhail@vydrenko.ru)
@@ -17,7 +17,7 @@
 #include "msg_api.h"
 #include "gpio_api.h"
 #include "stepgen_api.h"
-#include "arisc.stepgen.h"
+#include "arisc_stepgen.h"
 
 
 
@@ -33,7 +33,7 @@ MODULE_LICENSE("GPL");
 #define gp sg[ch]
 
 static int32_t comp_id;
-static const uint8_t * comp_name = "arisc.stepgen";
+static const uint8_t * comp_name = "arisc_stepgen";
 static uint8_t cpu_id = ALLWINNER_H3;
 
 static char *CPU = "H3";

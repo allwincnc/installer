@@ -1,5 +1,5 @@
 /********************************************************************
- * Description:  arisc.gpio.c
+ * Description:  arisc_gpio.c
  *               GPIO driver for the Allwinner ARISC firmware
  *
  * Author: MX_Master (mikhail@vydrenko.ru)
@@ -14,7 +14,7 @@
 
 #include "msg_api.h"
 #include "gpio_api.h"
-#include "arisc.gpio.h"
+#include "arisc_gpio.h"
 
 
 
@@ -27,7 +27,7 @@ MODULE_LICENSE("GPL");
 
 
 static int32_t comp_id;
-static const uint8_t * comp_name = "arisc.gpio";
+static const uint8_t * comp_name = "arisc_gpio";
 static uint8_t cpu_id = ALLWINNER_H3;
 
 static char *CPU = "H3";
