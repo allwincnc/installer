@@ -8,7 +8,7 @@ source tools.sh
   TASKS=( \
         "cmd:./install_system_tweaks.sh,    do:1,   arg:" \
         "cmd:./install_rt_kernel.sh,        do:1,   arg:" \
-        "cmd:./install_linuxcnc.sh,         do:1,   arg:2.7 en" \
+        "cmd:./install_linuxcnc.sh,         do:1,   arg:2.8 en" \
         "cmd:./install_machinekit.sh,       do:0,   arg:" \
         "cmd:./install_gpio_driver.sh,      do:1,   arg:linuxcnc" \
         "cmd:./install_gpio_configs.sh,     do:1,   arg:linuxcnc" \
