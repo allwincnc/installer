@@ -51,5 +51,5 @@ log "@@NOTE@@: You must reboot the system to complete the installation"
 
 
 
-log "--- The **${NAME}** was ++successfully installed++ -------"
+log "--- The **${NAME}** ++successfully installed++ -------"
 log ""

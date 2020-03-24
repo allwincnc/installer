@@ -83,5 +83,5 @@ sudo apt install machinekit-manual-pages -qq
 
 
 
-log "--- The **${NAME}** was ++successfully installed++ -------"
+log "--- The **${NAME}** ++successfully installed++ -------"
 log ""

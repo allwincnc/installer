@@ -160,5 +160,5 @@ fi
 
 
 # success
-log "--- The **$NAME** was ++successfully installed++ -------"
+log "--- The **$NAME** ++successfully installed++ -------"
 log ""

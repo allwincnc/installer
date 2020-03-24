@@ -37,5 +37,5 @@ sudo sed -i -e "s/.*GOVERNOR=.*/GOVERNOR=performance/" $F_FILE
 
 
 
-log "--- The **${NAME}** was ++successfully installed++ -------"
+log "--- The **${NAME}** ++successfully installed++ -------"
 log ""
