@@ -4,32 +4,32 @@ Binary: linuxcnc-uspace-dev linuxcnc-uspace linuxcnc-doc-en linuxcnc-doc-fr linu
 Architecture: all armhf source
 Version: 1:2.7.15
 Checksums-Md5:
- 7d97afed4c8c8f8df994e6c7d2ed8625 1537 linuxcnc_2.7.15.dsc
- 131b11276b4736424a30d9e2f3a03253 12238824 linuxcnc-doc-en_2.7.15_all.deb
- 050d8bc3e304feb8526a5b46fa5ef01c 11361536 linuxcnc-doc-es_2.7.15_all.deb
- bc8974303dd43ee3e2b5b0675cd2f6c3 6260328 linuxcnc-doc-fr_2.7.15_all.deb
- 14d220d25640094462d008ebbdc6082c 10401112 linuxcnc-uspace-dbgsym_2.7.15_armhf.deb
- aefe9394e432f80c52dcd67995010a4b 620992 linuxcnc-uspace-dev_2.7.15_armhf.deb
- 846dba276205966659058a43b0c112cd 3607904 linuxcnc-uspace_2.7.15_armhf.deb
+ 9c57feb724cff30b837887d3b929fd2f 1537 linuxcnc_2.7.15.dsc
+ bc6771768bed96f0501b8ddfec948f37 12216080 linuxcnc-doc-en_2.7.15_all.deb
+ fcb56120d50ef2e6e554127667225077 11361348 linuxcnc-doc-es_2.7.15_all.deb
+ f65273feefdb5e267ca347cb85179c8e 6260140 linuxcnc-doc-fr_2.7.15_all.deb
+ 038a558f3db171c49cc3b153c3de9430 10432140 linuxcnc-uspace-dbgsym_2.7.15_armhf.deb
+ 2c5fa8021dffa580d4c5b87d1296741c 620996 linuxcnc-uspace-dev_2.7.15_armhf.deb
+ 57ea85ef67387b265d189bd23d332e0b 3598148 linuxcnc-uspace_2.7.15_armhf.deb
 Checksums-Sha1:
- 472464d32373cd89f65edc8323387c00a529d7be 1537 linuxcnc_2.7.15.dsc
- 11bb0ae3bf19eb2616f42e8b50a85638d26c0bc6 12238824 linuxcnc-doc-en_2.7.15_all.deb
- 0e91ffea4843334989a399a18920e0d8bb6bd3a9 11361536 linuxcnc-doc-es_2.7.15_all.deb
- 8809b1589c0f151e0f1c4451d165f67a26a68b4b 6260328 linuxcnc-doc-fr_2.7.15_all.deb
- 5a41748bf0cc81c18214b814d1b1ac0ba5e7ddbd 10401112 linuxcnc-uspace-dbgsym_2.7.15_armhf.deb
- 1fd875b6f22adf688c26a529a8f62af78ff13348 620992 linuxcnc-uspace-dev_2.7.15_armhf.deb
- 4a7fe2fe5b8a88b2e9e3c47c15af6351fc610f9b 3607904 linuxcnc-uspace_2.7.15_armhf.deb
+ 595bf34a437ef8a58854c82ef6d70d97d457d0c5 1537 linuxcnc_2.7.15.dsc
+ 488bca007e345e0a7e606bd134758b8c681217cb 12216080 linuxcnc-doc-en_2.7.15_all.deb
+ 693ca4212ca7a314cb5dc4189ad0dfbf389b2328 11361348 linuxcnc-doc-es_2.7.15_all.deb
+ 8ff3eef361c898a712c2d4a29c5b28fce23c78be 6260140 linuxcnc-doc-fr_2.7.15_all.deb
+ 973f951e00aef997fce413908f507898de89ec84 10432140 linuxcnc-uspace-dbgsym_2.7.15_armhf.deb
+ 56cbc2cb9e8c0af45b636b5dd574c8e548cb8039 620996 linuxcnc-uspace-dev_2.7.15_armhf.deb
+ ad2a59886a3de01a421b774bebb966c44a7688cb 3598148 linuxcnc-uspace_2.7.15_armhf.deb
 Checksums-Sha256:
- a2b188b806fa6739f62d94bf7e6655392c1604dd5c0b6e0d808205dc40edeae5 1537 linuxcnc_2.7.15.dsc
- 0709e286e410f79e465f06ef5730b51170e092258ae93a1ede2df3a177fecf0c 12238824 linuxcnc-doc-en_2.7.15_all.deb
- f2264d898cda8884bb13c97892e6872747a7f3cac90a7a86782c3a24d32f1445 11361536 linuxcnc-doc-es_2.7.15_all.deb
- 3af35a38f1a794600a2b5d104b45dc9bb8bd334033f116708ce2dc83dec4c73d 6260328 linuxcnc-doc-fr_2.7.15_all.deb
- a45c6b3ca8b99c691ee6781a977a220e3840fe98fcdc69b2f5b2ca1431cadfd1 10401112 linuxcnc-uspace-dbgsym_2.7.15_armhf.deb
- 1ab641540a55ea4b77bc0fa1ef95f71ea7fbdcfb03a492c32b7653b90c47f19b 620992 linuxcnc-uspace-dev_2.7.15_armhf.deb
- 166d52d598f4c06967bd233400152f019002460ed3a249ac1fa80de4f5509a9d 3607904 linuxcnc-uspace_2.7.15_armhf.deb
+ 3a61524a540247b3d8d5fb7a967797c58401c2227fd49735acfdb36e048b43a1 1537 linuxcnc_2.7.15.dsc
+ 5bcf8ba30d62ca21b2abdaaba7f11c394fb741641c815d2c3bbc86da3d5408da 12216080 linuxcnc-doc-en_2.7.15_all.deb
+ 2d92025b94923c4773e5d7c38b54645f1b08f1f60f9f01c2f82b05c546e4690d 11361348 linuxcnc-doc-es_2.7.15_all.deb
+ 84d446ce835fc0d965e441227ce02c983bfffb4c0f75bf466d870c5f38cc29c7 6260140 linuxcnc-doc-fr_2.7.15_all.deb
+ 509181a415b58140101b46db17f840be5caf2f33f81ca20d1bd12a58cfc3b029 10432140 linuxcnc-uspace-dbgsym_2.7.15_armhf.deb
+ 2b87cf0721bcfbf206fe0a543211b3cedcf1b8b24bf92ae22734b0b485ca4e0e 620996 linuxcnc-uspace-dev_2.7.15_armhf.deb
+ fbc962206ccbf05beb4a977d06c65a55ca0f21f2c6290970bf7fac2556a02c48 3598148 linuxcnc-uspace_2.7.15_armhf.deb
 Build-Origin: Debian
 Build-Architecture: armhf
-Build-Date: Mon, 09 Mar 2020 08:44:02 +0000
+Build-Date: Tue, 24 Mar 2020 07:12:17 +0000
 Installed-Build-Depends:
  adduser (= 3.118),
  adwaita-icon-theme (= 3.30.1-1),
@@ -693,9 +693,9 @@ Installed-Build-Depends:
  zlib1g (= 1:1.2.11.dfsg-1),
  zlib1g-dev (= 1:1.2.11.dfsg-1)
 Environment:
- DEB_BUILD_OPTIONS="parallel=2"
+ DEB_BUILD_OPTIONS="parallel=1"
  LANG="en_US.UTF-8"
  LC_ALL="en_US.UTF-8"
  LC_MESSAGES="en_US.UTF-8"
- MAKEFLAGS=" -j2"
+ MAKEFLAGS=" -j1"
  SOURCE_DATE_EPOCH="1577991563"
