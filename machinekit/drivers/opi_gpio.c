@@ -1,5 +1,5 @@
 /********************************************************************
- * Description:  hal_opi_gpio.c
+ * Description:  opi_gpio.c
  *               Driver for the Orange Pi (H3/H5) GPIO pins
  *
  * Author: MX_Master (mikhail@vydrenko.ru)

@@ -1,5 +1,5 @@
 /********************************************************************
- * Description:  arisc.gpio.h
+ * Description:  arisc_gpio.h
  *               GPIO driver for the Allwinner ARISC firmware
  *
  * Author: MX_Master (mikhail@vydrenko.ru)

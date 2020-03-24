@@ -1,5 +1,5 @@
 /********************************************************************
- * Description:  arisc.stepgen.h
+ * Description:  arisc_stepgen.h
  *               STEPGEN driver for the Allwinner ARISC firmware
  *
  * Author: MX_Master (mikhail@vydrenko.ru)

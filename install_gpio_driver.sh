@@ -6,8 +6,8 @@ source tools.sh
       NAME="GPIO driver"
    CUR_DIR=$(pwd)
  TARGET_ID="0"
- ALL_FILES=("hal_opi_gpio.c")
-   C_FILES=("hal_opi_gpio.c")
+ ALL_FILES=("opi_gpio.c")
+   C_FILES=("opi_gpio.c")
 
 
 
