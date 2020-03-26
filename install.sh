@@ -48,10 +48,10 @@ done
 log     ""
 log     "--------------------------------------------------------"
 if [[ $ERR == "0" ]]; then
-    log "--- The **${NAME}** ++successfully installed++ -------"
+    log "--- **${NAME}** ++successfully installed++ -------"
     log "--- reboot the device to complete the installation -------"
 else
-    log "--- The **${NAME}** installed with !!errors!! -------"
+    log "--- **${NAME}** installed with !!errors!! -------"
     log "--- see the **$logFILE** file for details -------"
 fi
 log     "--------------------------------------------------------------"

@@ -95,5 +95,5 @@ done
 
 cd "${CUR_DIR}"
 
-log "--- The **${NAME}** ++successfully installed++ -------"
+log "--- **${NAME}** ++successfully installed++ -------"
 log ""
