@@ -1,0 +1,3 @@
+[submodule "armbian/arisc_lkm"]
+	path = armbian/arisc_lkm
+	url = https://github.cnc32.ru/orangecnc/arisc_lkm
