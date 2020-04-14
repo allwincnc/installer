@@ -68,7 +68,7 @@ int32_t msg_mem_init
     const char *comp_name
 )
 {
-    int32_t     mem_fd;
+    int32_t     mem_fd, fd;
     uint32_t    vrt_offset = 0;
     off_t       phy_block_addr = 0;
     int32_t     m = 0;
@@ -77,15 +77,40 @@ int32_t msg_mem_init
                                  ARISC_CONF_SIZE -
                                  MSG_BLOCK_SIZE;
 
-    // open physical memory file
     seteuid(0);
     setfsuid( geteuid() );
+
+    // FIXME - run ARISC core
+    if ( (fd = open("/dev/arisc_admin", O_RDWR) ) < 0 )
+    {
+        setfsuid( getuid() );
+        rtapi_print_msg(RTAPI_MSG_ERR, "%s: [MSG] can't open /dev/arisc_admin file\n", comp_name);
+        return -1;
+    }
+    const char *cmd = "erase /boot/arisc-fw.code upload \n";
+    if ( (write(fd, cmd, strlen(cmd)) ) < 0 )
+    {
+        setfsuid( getuid() );
+        rtapi_print_msg(RTAPI_MSG_ERR, "%s: [MSG] can't write to the /dev/arisc_admin file\n", comp_name);
+        return -1;
+    }
+    char buf[256+2];
+    if ( (read(fd, buf, 256) ) < 0 )
+    {
+        setfsuid( getuid() );
+        rtapi_print_msg(RTAPI_MSG_ERR, "%s: [MSG] can't read from the /dev/arisc_admin file\n", comp_name);
+        return -1;
+    }
+    close(fd);
+
+    // open physical memory file
     if ( (mem_fd = open("/dev/mem", O_RDWR|O_SYNC) ) < 0 )
     {
         setfsuid( getuid() );
         rtapi_print_msg(RTAPI_MSG_ERR, "%s: [MSG] can't open /dev/mem file\n", comp_name);
         return -1;
     }
+
     setfsuid( getuid() );
 
     // calculate phy memory block start
@@ -122,6 +147,35 @@ int32_t msg_mem_init
 void msg_mem_deinit(void)
 {
     munmap(msg_vrt_block_addr, 2*MSG_BLOCK_SIZE);
+
+    seteuid(0);
+    setfsuid( geteuid() );
+
+    // FIXME - stop ARISC core
+    int32_t fd;
+    if ( (fd = open("/dev/arisc_admin", O_RDWR) ) < 0 )
+    {
+        setfsuid( getuid() );
+        rtapi_print_msg(RTAPI_MSG_ERR, "%s: [MSG] can't open /dev/arisc_admin file\n");
+        return;
+    }
+    const char *cmd = "erase \n";
+    if ( (write(fd, cmd, strlen(cmd)) ) < 0 )
+    {
+        setfsuid( getuid() );
+        rtapi_print_msg(RTAPI_MSG_ERR, "%s: [MSG] can't write to the /dev/arisc_admin file\n");
+        return;
+    }
+    char buf[256+2];
+    if ( (read(fd, buf, 256) ) < 0 )
+    {
+        setfsuid( getuid() );
+        rtapi_print_msg(RTAPI_MSG_ERR, "%s: [MSG] can't read from the /dev/arisc_admin file\n");
+        return;
+    }
+    close(fd);
+
+    setfsuid( getuid() );
 }
 
 
