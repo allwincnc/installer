@@ -104,9 +104,9 @@ int32_t stepgen_pos_get(uint8_t c)
 
     msg_send(STEPGEN_MSG_POS_GET, msg_buf, 1*4, 0);
 
-    // finite loop, only 999999 tries to read an answer
+    // finite loop, only 9999 tries to read an answer
     uint32_t n = 0;
-    for ( n = 999999; n--; )
+    for ( n = 9999; n--; )
     {
         if ( msg_read(STEPGEN_MSG_POS_GET, msg_buf, 0) < 0 ) continue;
         else return (int32_t)tx->v[0];
