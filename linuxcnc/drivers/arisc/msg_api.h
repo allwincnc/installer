@@ -33,6 +33,8 @@
 #define MSG_MAX_LEN             (MSG_CPU_BLOCK_SIZE / MSG_MAX_CNT)
 #define MSG_LEN                 (MSG_MAX_LEN - 4)
 
+#define RUN_ARISC_WITH_LKM      0
+
 #pragma pack(push, 1)
 struct msg_t
 {
@@ -68,7 +70,7 @@ int32_t msg_mem_init
     const char *comp_name
 )
 {
-    int32_t     mem_fd, fd;
+    int32_t     mem_fd;
     uint32_t    vrt_offset = 0;
     off_t       phy_block_addr = 0;
     int32_t     m = 0;
@@ -80,7 +82,9 @@ int32_t msg_mem_init
     seteuid(0);
     setfsuid( geteuid() );
 
+#if RUN_ARISC_WITH_LKM
     // FIXME - run ARISC core
+    int32_t fd;
     if ( (fd = open("/dev/arisc_admin", O_RDWR) ) < 0 )
     {
         setfsuid( getuid() );
@@ -102,6 +106,7 @@ int32_t msg_mem_init
         return -1;
     }
     close(fd);
+#endif
 
     // open physical memory file
     if ( (mem_fd = open("/dev/mem", O_RDWR|O_SYNC) ) < 0 )
@@ -148,6 +153,7 @@ void msg_mem_deinit(void)
 {
     munmap(msg_vrt_block_addr, 2*MSG_BLOCK_SIZE);
 
+#if RUN_ARISC_WITH_LKM
     seteuid(0);
     setfsuid( geteuid() );
 
@@ -176,6 +182,7 @@ void msg_mem_deinit(void)
     close(fd);
 
     setfsuid( getuid() );
+#endif
 }
 
 
