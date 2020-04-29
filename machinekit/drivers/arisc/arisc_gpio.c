@@ -1,10 +1,3 @@
-/********************************************************************
- * Description:  arisc_gpio.c
- *               GPIO driver for the Allwinner ARISC firmware
- *
- * Author: MX_Master (mikhail@vydrenko.ru)
- ********************************************************************/
-
 #include <stdint.h>
 #include <string.h>
 #include <stdlib.h>
@@ -12,12 +5,7 @@
 #include "rtapi_app.h"
 #include "hal.h"
 
-#include "msg_api.h"
-#include "gpio_api.h"
-#include "arisc_gpio.h"
-
-
-
+#include "arisc_api.h"
 
 MODULE_AUTHOR("MX_Master");
 MODULE_DESCRIPTION("GPIO driver for the Allwinner ARISC firmware");
@@ -28,10 +16,9 @@ MODULE_LICENSE("GPL");
 
 static int32_t comp_id;
 static const uint8_t * comp_name = "arisc_gpio";
-static uint8_t cpu_id = ALLWINNER_H3;
 
-static char *CPU = "H3";
-RTAPI_MP_STRING(CPU, "Allwinner CPU name");
+static char *CPU = "H3"; // actually not used
+RTAPI_MP_STRING(CPU, "Allwinner CPU name"); // actually not used
 
 static int8_t *in = "";
 RTAPI_MP_STRING(in, "input pins, comma separated");
@@ -39,141 +26,51 @@ RTAPI_MP_STRING(in, "input pins, comma separated");
 static int8_t *out = "";
 RTAPI_MP_STRING(out, "output pins, comma separated");
 
-static const char *gpio_name[GPIO_PORTS_CNT] =
+static const char *gpio_name[GPIO_PORTS_MAX_CNT] =
     {"PA","PB","PC","PD","PE","PF","PG","PL"};
 
-static hal_u32_t **gpio_port_ID;
+static hal_bit_t **gpio_hal_0[GPIO_PORTS_MAX_CNT];
+static hal_bit_t **gpio_hal_1[GPIO_PORTS_MAX_CNT];
 
-static hal_bit_t **gpio_hal_0[GPIO_PORTS_CNT];
-static hal_bit_t **gpio_hal_1[GPIO_PORTS_CNT];
+static hal_bit_t gpio_hal_0_prev[GPIO_PORTS_MAX_CNT][GPIO_PINS_MAX_CNT];
+static hal_bit_t gpio_hal_1_prev[GPIO_PORTS_MAX_CNT][GPIO_PINS_MAX_CNT];
 
-static hal_bit_t gpio_hal_0_prev[GPIO_PORTS_CNT][GPIO_PINS_CNT];
-static hal_bit_t gpio_hal_1_prev[GPIO_PORTS_CNT][GPIO_PINS_CNT];
+static uint32_t gpio_real_prev[GPIO_PORTS_MAX_CNT] = {0};
 
-static uint32_t gpio_real[GPIO_PORTS_CNT] = {0};
-static uint32_t gpio_real_prev[GPIO_PORTS_CNT] = {0};
-
-static uint32_t gpio_out_mask[GPIO_PORTS_CNT] = {0};
-static uint32_t gpio_in_mask[GPIO_PORTS_CNT] = {0};
+static uint32_t gpio_out_mask[GPIO_PORTS_MAX_CNT] = {0};
+static uint32_t gpio_in_mask[GPIO_PORTS_MAX_CNT] = {0};
 
 static uint32_t gpio_in_cnt = 0;
 static uint32_t gpio_out_cnt = 0;
+static uint32_t gpio_ports_cnt = 0;
+static uint32_t gpio_pins_cnt[GPIO_PINS_MAX_CNT] = {0};
 
-static const uint32_t gpio_mask[GPIO_PINS_CNT] =
-{
-    1U<< 0, 1U<< 1, 1U<< 2, 1U<< 3, 1U<< 4, 1U<< 5, 1U<< 6, 1U<< 7,
-    1U<< 8, 1U<< 9, 1U<<10, 1U<<11, 1U<<12, 1U<<13, 1U<<14, 1U<<15,
-    1U<<16, 1U<<17, 1U<<18, 1U<<19, 1U<<20, 1U<<21, 1U<<22, 1U<<23,
-    1U<<24, 1U<<25, 1U<<26, 1U<<27, 1U<<28, 1U<<29, 1U<<30, 1U<<31
-};
+static uint32_t pin_msk[GPIO_PINS_MAX_CNT] = {0};
 
 
 
 
-// HAL functions
+// TOOLS
 
-static void gpio_read(void *arg, long period)
-{
-    static uint32_t port, pin;
-    static uint32_t* ports;
+static void gpio_write(void *arg, long period);
+static void gpio_read(void *arg, long period);
 
-    if ( !gpio_in_cnt ) return;
-
-    ports = gpio_all_get();
-
-    for ( port = GPIO_PORTS_CNT; port--; )
-    {
-        if ( !gpio_in_mask[port] ) continue;
-
-        gpio_real[port] = *(ports+port);
-
-        if ( gpio_real_prev[port] == gpio_real[port] ) continue;
-
-        for ( pin = GPIO_PINS_CNT; pin--; )
-        {
-            if ( !(gpio_in_mask[port] & gpio_mask[pin]) ) continue;
-
-            if ( gpio_real[port] & gpio_mask[pin] )
-            {
-                *gpio_hal_0[port][pin] = 1;
-                *gpio_hal_1[port][pin] = 0;
-            }
-            else
-            {
-                *gpio_hal_0[port][pin] = 0;
-                *gpio_hal_1[port][pin] = 1;
-            }
-        }
-
-        gpio_real_prev[port] = gpio_real[port];
-    }
-}
-
-static void gpio_write(void *arg, long period)
-{
-    static uint32_t port, pin;
-    static uint32_t mask_0_cnt, mask_1_cnt;
-    static uint32_t mask_0[GPIO_PORTS_CNT], mask_1[GPIO_PORTS_CNT];
-
-    if ( !gpio_out_cnt ) return;
-
-    mask_1_cnt = 0;
-    mask_0_cnt = 0;
-
-    for ( port = GPIO_PORTS_CNT; port--; )
-    {
-        mask_1[port] = 0;
-        mask_0[port] = 0;
-
-        if ( !gpio_out_mask[port] ) continue;
-
-        for ( pin = GPIO_PINS_CNT; pin--; )
-        {
-            if ( !(gpio_out_mask[port] & gpio_mask[pin]) ) continue;
-
-            if ( *gpio_hal_0[port][pin] != gpio_hal_0_prev[port][pin] )
-            {
-                gpio_hal_0_prev[port][pin] = *gpio_hal_0[port][pin];
-
-                if ( *gpio_hal_0[port][pin] ) mask_1[port] |= gpio_mask[pin];
-                else                          mask_0[port] |= gpio_mask[pin];
-            }
-
-            if ( *gpio_hal_1[port][pin] != gpio_hal_1_prev[port][pin] )
-            {
-                gpio_hal_1_prev[port][pin] = *gpio_hal_1[port][pin];
-
-                if ( *gpio_hal_1[port][pin] ) mask_0[port] |= gpio_mask[pin];
-                else                          mask_1[port] |= gpio_mask[pin];
-            }
-        }
-
-        if ( mask_1[port] ) ++mask_1_cnt;
-        if ( mask_0[port] ) ++mask_0_cnt;
-    }
-
-    if ( mask_1_cnt ) gpio_all_set(&mask_1[0]);
-    if ( mask_0_cnt ) gpio_all_clear(&mask_0[0]);
-}
-
-
-
-
-// INIT
-
-static int32_t gpio_malloc_and_export(const char *comp_name, int32_t comp_id)
+static inline
+int32_t malloc_and_export(const char *comp_name, int32_t comp_id)
 {
     int8_t* arg_str[2] = {in, out};
     int8_t n, r;
     uint8_t port;
     char name[HAL_NAME_LEN + 1];
 
+    // init some vars
+    for ( n = GPIO_PINS_MAX_CNT; n--; ) pin_msk[n] = 1UL << n;
 
     // shared memory allocation
-    for ( port = GPIO_PORTS_CNT; port--; )
+    for ( port = GPIO_PORTS_MAX_CNT; port--; )
     {
-        gpio_hal_0[port] = hal_malloc(GPIO_PINS_CNT * sizeof(hal_bit_t *));
-        gpio_hal_1[port] = hal_malloc(GPIO_PINS_CNT * sizeof(hal_bit_t *));
+        gpio_hal_0[port] = hal_malloc(GPIO_PINS_MAX_CNT * sizeof(hal_bit_t *));
+        gpio_hal_1[port] = hal_malloc(GPIO_PINS_MAX_CNT * sizeof(hal_bit_t *));
 
         if ( !gpio_hal_0[port] || !gpio_hal_1[port] )
         {
@@ -183,7 +80,6 @@ static int32_t gpio_malloc_and_export(const char *comp_name, int32_t comp_id)
             return -1;
         }
     }
-
 
     // export HAL pins
     for ( n = 2; n--; )
@@ -201,7 +97,7 @@ static int32_t gpio_malloc_and_export(const char *comp_name, int32_t comp_id)
             if ( strlen(token) < 3 ) continue;
 
             // trying to find a correct port name
-            for ( found = 0, port = GPIO_PORTS_CNT; port--; )
+            for ( found = 0, port = GPIO_PORTS_MAX_CNT; port--; )
             {
                 if ( 0 == memcmp(token, gpio_name[port], 2) )
                 {
@@ -215,7 +111,7 @@ static int32_t gpio_malloc_and_export(const char *comp_name, int32_t comp_id)
             // trying to find a correct pin number
             pin = (uint8_t) strtoul(&token[2], NULL, 10);
 
-            if ( (pin == 0 && token[2] != '0') || pin >= GPIO_PINS_CNT ) continue;
+            if ( (pin == 0 && token[2] != '0') || pin >= GPIO_PINS_MAX_CNT ) continue;
 
             // export pin function
             retval = hal_pin_bit_newf( (n ? HAL_IN : HAL_OUT),
@@ -238,40 +134,29 @@ static int32_t gpio_malloc_and_export(const char *comp_name, int32_t comp_id)
             if ( n )
             {
                 gpio_out_cnt++;
-                gpio_out_mask[port] |= gpio_mask[pin];
-                gpio_pin_setup_for_output(port, pin);
+                gpio_out_mask[port] |= pin_msk[pin];
+                gpio_pin_setup_for_output(port, pin, 0);
             }
             else
             {
                 gpio_in_cnt++;
-                gpio_in_mask[port] |= gpio_mask[pin];
-                gpio_pin_setup_for_input(port, pin);
+                gpio_in_mask[port] |= pin_msk[pin];
+                gpio_pin_setup_for_input(port, pin, 0);
             }
+
+            // get/set pin init state
+            *gpio_hal_0[port][pin] = gpio_pin_get(port, pin, 0);
+            *gpio_hal_1[port][pin] = *gpio_hal_0[port][pin] ? 0 : 1;
+            gpio_hal_0_prev[port][pin] = *gpio_hal_0[port][pin];
+            gpio_hal_1_prev[port][pin] = *gpio_hal_1[port][pin];
+
+            // used ports count update
+            if ( port >= gpio_ports_cnt ) gpio_ports_cnt = port + 1;
+                        // used port pins count update
+            if ( port >= gpio_pins_cnt[port] ) gpio_pins_cnt[port] = pin + 1;
         }
 
     }
-
-
-    // export port ID pins
-    gpio_port_ID = hal_malloc(GPIO_PORTS_CNT * sizeof(hal_u32_t));
-    if ( !gpio_port_ID )
-    {
-        rtapi_print_msg(RTAPI_MSG_ERR, "%s: [GPIO] port ID pins malloc failed\n", comp_name);
-        return -1;
-    }
-
-    for ( r = 0, port = GPIO_PORTS_CNT; port--; )
-    {
-        r += hal_pin_u32_newf(HAL_OUT, &gpio_port_ID[port], comp_id, "%s", gpio_name[port]);
-        if (r) break;
-        *gpio_port_ID[port] = port;
-    }
-    if ( r )
-    {
-        rtapi_print_msg(RTAPI_MSG_ERR, "%s: [GPIO] port ID pins export failed\n", comp_name);
-        return -1;
-    }
-
 
     // export HAL functions
     r = 0;
@@ -285,30 +170,123 @@ static int32_t gpio_malloc_and_export(const char *comp_name, int32_t comp_id)
         return -1;
     }
 
-
     return 0;
 }
 
 
 
 
+// HAL functions
+
+static
+void gpio_read(void *arg, long period)
+{
+    static uint32_t port, pin;
+    static uint32_t port_state;
+
+    if ( !gpio_in_cnt ) return;
+
+    for ( port = gpio_ports_cnt; port--; )
+    {
+        if ( !gpio_in_mask[port] ) continue;
+
+        port_state = gpio_port_get(port, 0);
+
+        if ( gpio_real_prev[port] == port_state ) continue;
+
+        for ( pin = gpio_pins_cnt[port]; pin--; )
+        {
+            if ( !(gpio_in_mask[port] & pin_msk[pin]) ) continue;
+
+            if ( port_state & pin_msk[pin] )
+            {
+                *gpio_hal_0[port][pin] = 1;
+                *gpio_hal_1[port][pin] = 0;
+            }
+            else
+            {
+                *gpio_hal_0[port][pin] = 0;
+                *gpio_hal_1[port][pin] = 1;
+            }
+        }
+
+        gpio_real_prev[port] = port_state;
+    }
+}
+
+static
+void gpio_write(void *arg, long period)
+{
+    static uint32_t port, pin;
+    static uint32_t mask_0, mask_1;
+
+    if ( !gpio_out_cnt ) return;
+
+    for ( port = gpio_ports_cnt; port--; )
+    {
+        if ( !gpio_out_mask[port] ) continue;
+
+        mask_0 = 0;
+        mask_1 = 0;
+
+        for ( pin = gpio_pins_cnt[port]; pin--; )
+        {
+            if ( !(gpio_out_mask[port] & pin_msk[pin]) ) continue;
+
+            if ( *gpio_hal_0[port][pin] != gpio_hal_0_prev[port][pin] )
+            {
+                if ( *gpio_hal_0[port][pin] )
+                {
+                    *gpio_hal_1[port][pin] = 0;
+                    mask_1 |= pin_msk[pin];
+                }
+                else
+                {
+                    *gpio_hal_1[port][pin] = 1;
+                    mask_0 |= pin_msk[pin];
+                }
+                gpio_hal_0_prev[port][pin] = *gpio_hal_0[port][pin];
+                gpio_hal_1_prev[port][pin] = *gpio_hal_1[port][pin];
+            }
+
+            if ( *gpio_hal_1[port][pin] != gpio_hal_1_prev[port][pin] )
+            {
+                if ( *gpio_hal_1[port][pin] )
+                {
+                    *gpio_hal_0[port][pin] = 0;
+                    mask_0 |= pin_msk[pin];
+                }
+                else
+                {
+                    *gpio_hal_0[port][pin] = 1;
+                    mask_1 |= pin_msk[pin];
+                }
+                gpio_hal_1_prev[port][pin] = *gpio_hal_1[port][pin];
+                gpio_hal_0_prev[port][pin] = *gpio_hal_0[port][pin];
+            }
+        }
+
+        if ( mask_0 ) gpio_port_clr(port, mask_0, 0);
+        if ( mask_1 ) gpio_port_set(port, mask_1, 0);
+    }
+}
+
+
+
+
+// INIT
+
 int32_t rtapi_app_main(void)
 {
-    // get component id
     if ( (comp_id = hal_init(comp_name)) < 0 )
+        PRINT_ERROR_AND_RETURN("ERROR: hal_init() failed\n",-1);
+
+    if ( shmem_init(comp_name) || malloc_and_export(comp_name, comp_id) )
     {
-        rtapi_print_msg(RTAPI_MSG_ERR, "%s: hal_init() failed\n", comp_name);
+        hal_exit(comp_id);
         return -1;
     }
 
-    #define EXIT { hal_exit(comp_id); return -1; }
-
-    // shared memory allocation and export
-    cpu_id = allwinner_cpu_id_get(CPU);
-    if ( msg_mem_init(cpu_id, comp_name) ) EXIT;
-    if ( gpio_malloc_and_export(comp_name, comp_id) ) EXIT;
-
-    // driver ready to work
     hal_ready(comp_id);
 
     return 0;
@@ -316,6 +294,6 @@ int32_t rtapi_app_main(void)
 
 void rtapi_app_exit(void)
 {
-    msg_mem_deinit();
+    shmem_deinit();
     hal_exit(comp_id);
 }
