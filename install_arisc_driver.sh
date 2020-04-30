@@ -6,8 +6,7 @@ source tools.sh
       NAME="ARISC drivers"
    CUR_DIR=$(pwd)
  TARGET_ID="0"
- ALL_FILES=("allwinner_CPU.h" "arisc_gpio.h" "arisc_gpio.c" "arisc_stepgen.h" \
-            "arisc_stepgen.c" "gpio_api.h"   "msg_api.h"    "stepgen_api.h")
+ ALL_FILES=("arisc_api.h" "arisc_gpio.c" "arisc_stepgen.c")
    C_FILES=("arisc_gpio.c" "arisc_stepgen.c")
 
 
