@@ -30,8 +30,8 @@
 
 loadrt trivkins
 loadrt [EMCMOT]EMCMOT base_period_nsec=[EMCMOT]BASE_PERIOD servo_period_nsec=[EMCMOT]SERVO_PERIOD num_joints=[TRAJ]AXES
-loadrt arisc_gpio     CPU=H3 in=PA13,PA14,PD14,PC4 out=PC2,PA19,PA7,PA8
-loadrt arisc_stepgen  CPU=H3 ctrl_type=p,p,p
+loadrt arisc_gpio     in=PA13,PA14,PD14,PC4 out=PC2,PA19,PA7,PA8
+loadrt arisc_stepgen  ctrl_type=p,p,p
 loadrt pwmgen         output_type=1
 
 
@@ -60,10 +60,6 @@ setp pwmgen.0.offset     0.0
 setp pwmgen.0.dither-pwm true
 
 setp arisc_stepgen.0.position-scale [AXIS_0]SCALE
-setp arisc_stepgen.0.steplen        0
-setp arisc_stepgen.0.stepspace      0
-setp arisc_stepgen.0.dirhold        35000
-setp arisc_stepgen.0.dirsetup       35000
 setp arisc_stepgen.0.step-port      0     # 0=PA, 1=PB, 2=PC, 3=PD, ...
 setp arisc_stepgen.0.step-pin       12    # PA12 (3)
 setp arisc_stepgen.0.step-invert    0
@@ -72,10 +68,6 @@ setp arisc_stepgen.0.dir-pin        11    # PA11 (5)
 setp arisc_stepgen.0.dir-invert     0
 
 setp arisc_stepgen.1.position-scale [AXIS_1]SCALE
-setp arisc_stepgen.1.steplen        0
-setp arisc_stepgen.1.stepspace      0
-setp arisc_stepgen.1.dirhold        35000
-setp arisc_stepgen.1.dirsetup       35000
 setp arisc_stepgen.1.step-port      0     # 0=PA, 1=PB, 2=PC, 3=PD, ...
 setp arisc_stepgen.1.step-pin       6     # PA6 (7)
 setp arisc_stepgen.1.step-invert    0
@@ -84,10 +76,6 @@ setp arisc_stepgen.1.dir-pin        1     # PA1 (11)
 setp arisc_stepgen.1.dir-invert     0
 
 setp arisc_stepgen.2.position-scale [AXIS_2]SCALE
-setp arisc_stepgen.2.steplen        0
-setp arisc_stepgen.2.stepspace      0
-setp arisc_stepgen.2.dirhold        35000
-setp arisc_stepgen.2.dirsetup       35000
 setp arisc_stepgen.2.step-port      0     # 0=PA, 1=PB, 2=PC, 3=PD, ...
 setp arisc_stepgen.2.step-pin       0     # PA0 (13)
 setp arisc_stepgen.2.step-invert    0
@@ -106,7 +94,7 @@ net x-pos-fb   arisc_stepgen.0.position-fb
 net x-pos-fb   axis.0.motor-pos-fb
 net x-enable   arisc_stepgen.0.enable       
 net x-enable   axis.0.amp-enable-out 
-net x-enable   arisc_gpio.PC2-out
+net x-enable   arisc_gpio.PC2-out-not
 net x-home-sw  axis.0.home-sw-in            
 net x-home-sw  arisc_gpio.PA13-in
 
