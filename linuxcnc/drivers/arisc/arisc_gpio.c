@@ -17,9 +17,6 @@ MODULE_LICENSE("GPL");
 static int32_t comp_id;
 static const uint8_t * comp_name = "arisc_gpio";
 
-static char *CPU = "H3"; // actually not used
-RTAPI_MP_STRING(CPU, "Allwinner CPU name"); // actually not used
-
 static int8_t *in = "";
 RTAPI_MP_STRING(in, "input pins, comma separated");
 
@@ -31,11 +28,14 @@ static const char *gpio_name[GPIO_PORTS_MAX_CNT] =
 
 static hal_bit_t **gpio_hal_0[GPIO_PORTS_MAX_CNT];
 static hal_bit_t **gpio_hal_1[GPIO_PORTS_MAX_CNT];
-
 static hal_bit_t gpio_hal_0_prev[GPIO_PORTS_MAX_CNT][GPIO_PINS_MAX_CNT];
 static hal_bit_t gpio_hal_1_prev[GPIO_PORTS_MAX_CNT][GPIO_PINS_MAX_CNT];
 
-static uint32_t gpio_real_prev[GPIO_PORTS_MAX_CNT] = {0};
+static hal_s32_t **gpio_hal_pull[GPIO_PORTS_MAX_CNT];
+static hal_s32_t gpio_hal_pull_prev[GPIO_PORTS_MAX_CNT][GPIO_PINS_MAX_CNT];
+
+static hal_u32_t **gpio_hal_drive[GPIO_PORTS_MAX_CNT];
+static hal_u32_t gpio_hal_drive_prev[GPIO_PORTS_MAX_CNT][GPIO_PINS_MAX_CNT];
 
 static uint32_t gpio_out_mask[GPIO_PORTS_MAX_CNT] = {0};
 static uint32_t gpio_in_mask[GPIO_PORTS_MAX_CNT] = {0};
@@ -71,8 +71,11 @@ int32_t malloc_and_export(const char *comp_name, int32_t comp_id)
     {
         gpio_hal_0[port] = hal_malloc(GPIO_PINS_MAX_CNT * sizeof(hal_bit_t *));
         gpio_hal_1[port] = hal_malloc(GPIO_PINS_MAX_CNT * sizeof(hal_bit_t *));
+        gpio_hal_pull[port] = hal_malloc(GPIO_PINS_MAX_CNT * sizeof(hal_s32_t *));
+        gpio_hal_drive[port] = hal_malloc(GPIO_PINS_MAX_CNT * sizeof(hal_u32_t *));
 
-        if ( !gpio_hal_0[port] || !gpio_hal_1[port] )
+        if ( !gpio_hal_0[port] || !gpio_hal_1[port] ||
+             !gpio_hal_pull[port] || !gpio_hal_drive[port] )
         {
             rtapi_print_msg(RTAPI_MSG_ERR,
                 "%s: port %s hal_malloc() failed \n",
@@ -123,6 +126,16 @@ int32_t malloc_and_export(const char *comp_name, int32_t comp_id)
                 &gpio_hal_1[port][pin], comp_id,
                 "%s.%s-%s-not", comp_name, token, type_str);
 
+            // export pin pull up/down function
+            retval += hal_pin_s32_newf( HAL_IN,
+                &gpio_hal_pull[port][pin], comp_id,
+                "%s.%s-pull", comp_name, token);
+
+            // export pin multi-drive (open drain) function
+            retval += hal_pin_u32_newf( HAL_IN,
+                &gpio_hal_drive[port][pin], comp_id,
+                "%s.%s-multi-drive-level", comp_name, token);
+
             if (retval < 0)
             {
                 rtapi_print_msg(RTAPI_MSG_ERR, "%s: pin %s export failed \n",
@@ -135,14 +148,17 @@ int32_t malloc_and_export(const char *comp_name, int32_t comp_id)
             {
                 gpio_out_cnt++;
                 gpio_out_mask[port] |= pin_msk[pin];
-                gpio_pin_setup_for_output(port, pin, 0);
+                gpio_pin_func_set(port, pin, GPIO_FUNC_OUT, 0);
             }
             else
             {
                 gpio_in_cnt++;
                 gpio_in_mask[port] |= pin_msk[pin];
-                gpio_pin_setup_for_input(port, pin, 0);
+                gpio_pin_func_set(port, pin, GPIO_FUNC_IN, 0);
             }
+
+            // disable pull up/down
+            gpio_pin_pull_set(port, pin, GPIO_PULL_DISABLE, 0);
 
             // get/set pin init state
             *gpio_hal_0[port][pin] = gpio_pin_get(port, pin, 0);
@@ -150,10 +166,23 @@ int32_t malloc_and_export(const char *comp_name, int32_t comp_id)
             gpio_hal_0_prev[port][pin] = *gpio_hal_0[port][pin];
             gpio_hal_1_prev[port][pin] = *gpio_hal_1[port][pin];
 
+            // get pin pull up/down state
+            switch ( gpio_pin_pull_get(port, pin, 0) )
+            {
+                case GPIO_PULL_UP:      *gpio_hal_pull[port][pin] = 1;
+                case GPIO_PULL_DOWN:    *gpio_hal_pull[port][pin] = -1;
+                default:                *gpio_hal_pull[port][pin] = 0;
+            }
+            gpio_hal_pull_prev[port][pin] = *gpio_hal_pull[port][pin];
+
+            // get pin multi-drive (open drain) state
+            *gpio_hal_drive[port][pin] = gpio_pin_multi_drive_get(port, pin, 0);
+            gpio_hal_drive_prev[port][pin] = *gpio_hal_drive[port][pin];
+
             // used ports count update
             if ( port >= gpio_ports_cnt ) gpio_ports_cnt = port + 1;
-                        // used port pins count update
-            if ( port >= gpio_pins_cnt[port] ) gpio_pins_cnt[port] = pin + 1;
+            // used port pins count update
+            if ( pin >= gpio_pins_cnt[port] ) gpio_pins_cnt[port] = pin + 1;
         }
 
     }
@@ -163,7 +192,7 @@ int32_t malloc_and_export(const char *comp_name, int32_t comp_id)
     rtapi_snprintf(name, sizeof(name), "%s.write", comp_name);
     r += hal_export_funct(name, gpio_write, 0, 0, 0, comp_id);
     rtapi_snprintf(name, sizeof(name), "%s.read", comp_name);
-    r += hal_export_funct(name, gpio_write, 0, 0, 0, comp_id);
+    r += hal_export_funct(name, gpio_read, 0, 0, 0, comp_id);
     if ( r )
     {
         rtapi_print_msg(RTAPI_MSG_ERR, "%s: [GPIO] functions export failed\n", comp_name);
@@ -181,8 +210,7 @@ int32_t malloc_and_export(const char *comp_name, int32_t comp_id)
 static
 void gpio_read(void *arg, long period)
 {
-    static uint32_t port, pin;
-    static uint32_t port_state;
+    static uint32_t port, pin, port_state;
 
     if ( !gpio_in_cnt ) return;
 
@@ -191,8 +219,6 @@ void gpio_read(void *arg, long period)
         if ( !gpio_in_mask[port] ) continue;
 
         port_state = gpio_port_get(port, 0);
-
-        if ( gpio_real_prev[port] == port_state ) continue;
 
         for ( pin = gpio_pins_cnt[port]; pin--; )
         {
@@ -209,28 +235,53 @@ void gpio_read(void *arg, long period)
                 *gpio_hal_1[port][pin] = 1;
             }
         }
-
-        gpio_real_prev[port] = port_state;
     }
 }
 
 static
 void gpio_write(void *arg, long period)
 {
-    static uint32_t port, pin;
-    static uint32_t mask_0, mask_1;
+    static uint32_t port, pin, mask_0, mask_1;
 
-    if ( !gpio_out_cnt ) return;
+    if ( !gpio_in_cnt && !gpio_out_cnt ) return;
 
     for ( port = gpio_ports_cnt; port--; )
     {
-        if ( !gpio_out_mask[port] ) continue;
+        if ( !gpio_in_mask[port] && !gpio_out_mask[port] ) continue;
 
         mask_0 = 0;
         mask_1 = 0;
 
         for ( pin = gpio_pins_cnt[port]; pin--; )
         {
+            if ( !(gpio_in_mask[port] & pin_msk[pin]) &&
+                 !(gpio_out_mask[port] & pin_msk[pin]) ) continue;
+
+            // set pin pull up/down state
+            if ( gpio_hal_pull_prev[port][pin] != *gpio_hal_pull[port][pin] )
+            {
+                if ( *gpio_hal_pull[port][pin] > 0 )
+                {
+                    *gpio_hal_pull[port][pin] = 1;
+                    gpio_pin_pull_set(port, pin, GPIO_PULL_UP, 0);
+                }
+                else if ( *gpio_hal_pull[port][pin] < 0 )
+                {
+                    *gpio_hal_pull[port][pin] = -1;
+                    gpio_pin_pull_set(port, pin, GPIO_PULL_DOWN, 0);
+                }
+                else gpio_pin_pull_set(port, pin, GPIO_PULL_DISABLE, 0);
+                gpio_hal_pull_prev[port][pin] = *gpio_hal_pull[port][pin];
+            }
+
+            // set pin multi-drive (open drain) state
+            if ( gpio_hal_drive_prev[port][pin] != *gpio_hal_drive[port][pin] )
+            {
+                *gpio_hal_drive[port][pin] &= (GPIO_PULL_CNT - 1);
+                gpio_pin_multi_drive_set(port, pin, *gpio_hal_drive[port][pin], 0);
+                gpio_hal_drive_prev[port][pin] = *gpio_hal_drive[port][pin];
+            }
+
             if ( !(gpio_out_mask[port] & pin_msk[pin]) ) continue;
 
             if ( *gpio_hal_0[port][pin] != gpio_hal_0_prev[port][pin] )

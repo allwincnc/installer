@@ -30,6 +30,37 @@
 #define GPIO_PORTS_MAX_CNT      8
 #define GPIO_PINS_MAX_CNT       24
 
+enum
+{
+    GPIO_FUNC_IN,
+    GPIO_FUNC_OUT,
+    GPIO_FUNC_2,
+    GPIO_FUNC_3,
+    GPIO_FUNC_RESERVED4,
+    GPIO_FUNC_RESERVED5,
+    GPIO_FUNC_EINT,
+    GPIO_FUNC_DISABLE,
+    GPIO_FUNC_CNT
+};
+
+enum
+{
+    GPIO_MULTI_DRIVE_LEVEL0,
+    GPIO_MULTI_DRIVE_LEVEL1,
+    GPIO_MULTI_DRIVE_LEVEL2,
+    GPIO_MULTI_DRIVE_LEVEL3,
+    GPIO_MULTI_DRIVE_LEVEL_CNT
+};
+
+enum
+{
+    GPIO_PULL_DISABLE,
+    GPIO_PULL_UP,
+    GPIO_PULL_DOWN,
+    GPIO_PULL_RESERVED3,
+    GPIO_PULL_CNT
+};
+
 enum { PA, PB, PC, PD, PE, PF, PG, PL };
 enum { LOW, HIGH };
 
@@ -141,23 +172,91 @@ void _spin_unlock()
 }
 
 static inline
-int32_t gpio_pin_setup_for_output(uint32_t port, uint32_t pin, uint32_t safe)
+int32_t spin_lock_test(uint32_t usec)
 {
-    if ( safe )
-    {
-        if ( port >= GPIO_PORTS_MAX_CNT ) return -1;
-        if ( pin >= GPIO_PINS_MAX_CNT ) return -2;
-    }
-    uint32_t slot = pin/8, pos = pin%8*4;
     _spin_lock();
-    _GPIO[port]->config[slot] &= ~(0b1111 << pos);
-    _GPIO[port]->config[slot] |=  (0b0001 << pos);
+    usleep(usec);
     _spin_unlock();
     return 0;
 }
 
 static inline
-int32_t gpio_pin_setup_for_input(uint32_t port, uint32_t pin, uint32_t safe)
+int32_t gpio_pin_pull_set(uint32_t port, uint32_t pin, uint32_t level, uint32_t safe)
+{
+    if ( safe )
+    {
+        if ( port >= GPIO_PORTS_MAX_CNT ) return -1;
+        if ( pin >= GPIO_PINS_MAX_CNT ) return -2;
+        if ( level >= GPIO_PULL_CNT ) return -3;
+    }
+    uint32_t slot = pin/16, pos = pin%16*2;
+    _spin_lock();
+    _GPIO[port]->pull[slot] &= ~(0b11 << pos);
+    _GPIO[port]->pull[slot] |= (level << pos);
+    _spin_unlock();
+    return 0;
+}
+
+static inline
+uint32_t gpio_pin_pull_get(uint32_t port, uint32_t pin, uint32_t safe)
+{
+    if ( safe )
+    {
+        if ( port >= GPIO_PORTS_MAX_CNT ) return -1;
+        if ( pin >= GPIO_PINS_MAX_CNT ) return -2;
+    }
+    uint32_t slot = pin/16, pos = pin%16*2;
+    return (_GPIO[port]->pull[slot] >> pos) & 0b11;
+}
+
+static inline
+int32_t gpio_pin_multi_drive_set(uint32_t port, uint32_t pin, uint32_t level, uint32_t safe)
+{
+    if ( safe )
+    {
+        if ( port >= GPIO_PORTS_MAX_CNT ) return -1;
+        if ( pin >= GPIO_PINS_MAX_CNT ) return -2;
+        if ( level >= GPIO_MULTI_DRIVE_LEVEL_CNT ) return -3;
+    }
+    uint32_t slot = pin/16, pos = pin%16*2;
+    _spin_lock();
+    _GPIO[port]->drive[slot] &= ~(0b11 << pos);
+    _GPIO[port]->drive[slot] |= (level << pos);
+    _spin_unlock();
+    return 0;
+}
+
+static inline
+uint32_t gpio_pin_multi_drive_get(uint32_t port, uint32_t pin, uint32_t safe)
+{
+    if ( safe )
+    {
+        if ( port >= GPIO_PORTS_MAX_CNT ) return -1;
+        if ( pin >= GPIO_PINS_MAX_CNT ) return -2;
+    }
+    uint32_t slot = pin/16, pos = pin%16*2;
+    return (_GPIO[port]->drive[slot] >> pos) & 0b11;
+}
+
+static inline
+int32_t gpio_pin_func_set(uint32_t port, uint32_t pin, uint32_t func, uint32_t safe)
+{
+    if ( safe )
+    {
+        if ( port >= GPIO_PORTS_MAX_CNT ) return -1;
+        if ( pin >= GPIO_PINS_MAX_CNT ) return -2;
+        if ( func >= GPIO_FUNC_CNT ) return -3;
+    }
+    uint32_t slot = pin/8, pos = pin%8*4;
+    _spin_lock();
+    _GPIO[port]->config[slot] &= ~(0b0111 << pos);
+    _GPIO[port]->config[slot] |=    (func << pos);
+    _spin_unlock();
+    return 0;
+}
+
+static inline
+uint32_t gpio_pin_func_get(uint32_t port, uint32_t pin, uint32_t safe)
 {
     if ( safe )
     {
@@ -165,10 +264,7 @@ int32_t gpio_pin_setup_for_input(uint32_t port, uint32_t pin, uint32_t safe)
         if ( pin >= GPIO_PINS_MAX_CNT ) return -2;
     }
     uint32_t slot = pin/8, pos = pin%8*4;
-    _spin_lock();
-    _GPIO[port]->config[slot] &= ~(0b1111 << pos);
-    _spin_unlock();
-    return 0;
+    return (_GPIO[port]->config[slot] >> pos) & 0b0111;
 }
 
 static inline
@@ -400,7 +496,8 @@ int32_t stepgen_pin_setup(uint32_t c, uint8_t type, uint32_t port, uint32_t pin,
     _sgc[c].pin_msk[type] = 1UL << pin;
     _sgc[c].pin_mskn[type] = ~(_sgc[c].pin_msk[type]);
 
-    gpio_pin_setup_for_output(port, pin, safe);
+    gpio_pin_func_set(port, pin, GPIO_FUNC_OUT, safe);
+    gpio_pin_pull_set(port, pin, GPIO_PULL_DISABLE, safe);
     if ( invert ) gpio_pin_set(port, pin, safe);
     else gpio_pin_clr(port, pin, safe);
 
