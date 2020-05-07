@@ -44,8 +44,8 @@ esac
 
 # set language code
 case "${LNG}" in
-    "en") LNG_CODE=${LNG}_US; ;;
-    "ru") LNG_CODE=${LNG}_RU; ;;
+    "en") LNG_CODE="${LNG}_US"; ;;
+    "ru") LNG_CODE="${LNG}_RU"; ;;
 esac
 
 
