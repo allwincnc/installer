@@ -7,6 +7,7 @@ source tools.sh
     ERR="0"
   TASKS=( \
         "cmd:./install_system_tweaks.sh,    do:1,   arg:" \
+        "cmd:./install_system_lang.sh,      do:1,   arg:" \
         "cmd:./install_rt_kernel.sh,        do:1,   arg:" \
         "cmd:./install_linuxcnc.sh,         do:1,   arg:2.7 en" \
         "cmd:./install_machinekit.sh,       do:0,   arg:" \
