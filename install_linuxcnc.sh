@@ -8,8 +8,8 @@ source tools.sh
    DOC_LNG=""
    DOC_DIR="/usr/share/doc/linuxcnc"
    SRC_DIR="./linuxcnc"
-  SRC_ARCH=("armhf","arm64")
-  DST_ARCH=("armv7","aarch64")
+  SRC_ARCH=("armhf" "arm64")
+  DST_ARCH=("armv7" "aarch64")
  ALL_FILES=("linuxcnc-doc-en_2.8.0~pre1_all.deb" \
             "linuxcnc-doc-es_2.8.0~pre1_all.deb" \
             "linuxcnc-doc-fr_2.8.0~pre1_all.deb" \
