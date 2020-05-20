@@ -8,14 +8,17 @@ source tools.sh
    DOC_LNG=""
    DOC_DIR="/usr/share/doc/linuxcnc"
    SRC_DIR="./linuxcnc"
-  SRC_ARCH=("armhf")
-  DST_ARCH=("armv7")
+  SRC_ARCH=("armhf","arm64")
+  DST_ARCH=("armv7","aarch64")
  ALL_FILES=("linuxcnc-doc-en_2.8.0~pre1_all.deb" \
             "linuxcnc-doc-es_2.8.0~pre1_all.deb" \
             "linuxcnc-doc-fr_2.8.0~pre1_all.deb" \
             "linuxcnc-uspace_2.8.0~pre1_armhf.deb" \
             "linuxcnc-uspace-dbgsym_2.8.0~pre1_armhf.deb" \
             "linuxcnc-uspace-dev_2.8.0~pre1_armhf.deb" \
+            "linuxcnc-uspace_2.8.0~pre1_arm64.deb" \
+            "linuxcnc-uspace-dbgsym_2.8.0~pre1_arm64.deb" \
+            "linuxcnc-uspace-dev_2.8.0~pre1_arm64.deb" \
             \
             "linuxcnc-doc-en_2.7.15_all.deb" \
             "linuxcnc-doc-es_2.7.15_all.deb" \
@@ -23,6 +26,9 @@ source tools.sh
             "linuxcnc-uspace_2.7.15_armhf.deb" \
             "linuxcnc-uspace-dbgsym_2.7.15_armhf.deb" \
             "linuxcnc-uspace-dev_2.7.15_armhf.deb" \
+            "linuxcnc-uspace_2.7.15_arm64.deb" \
+            "linuxcnc-uspace-dbgsym_2.7.15_arm64.deb" \
+            "linuxcnc-uspace-dev_2.7.15_arm64.deb" \
             )
 
 

@@ -5,10 +5,12 @@ source tools.sh
 # var list
       NAME="PREEMPT RT kernel"
    SRC_DIR="./armbian/preempt_rt_kernel"
-  SRC_ARCH=("armhf")
-  DST_ARCH=("armv7")
+  SRC_ARCH=("armhf","arm64")
+  DST_ARCH=("armv7","aarch64")
  ALL_FILES=("linux-image-current-sunxi_20.02.3_armhf.deb" \
             "linux-headers-current-sunxi_20.02.3_armhf.deb" \
+            "linux-image-current-sunxi64_20.05.0-trunk_arm64.deb" \
+            "linux-headers-current-sunxi64_20.05.0-trunk_arm64.deb" \
             )
 
 
