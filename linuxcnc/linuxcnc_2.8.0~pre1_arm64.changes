@@ -1,0 +1,52 @@
+Format: 1.8
+Source: linuxcnc
+Binary: linuxcnc-doc-en linuxcnc-doc-es linuxcnc-doc-fr linuxcnc-uspace linuxcnc-uspace-dbgsym linuxcnc-uspace-dev
+Architecture: source all arm64
+Version: 1:2.8.0~pre1
+Distribution: rosa
+Urgency: low
+Maintainer: Sebastian Kuzminsky <seb@highlab.com>
+Description:
+ linuxcnc-doc-en - motion controller for CNC machines and robots (English documentat
+ linuxcnc-doc-es - motion controller for CNC machines and robots (Spanish documentat
+ linuxcnc-doc-fr - motion controller for CNC machines and robots (French documentati
+ linuxcnc-uspace - motion controller for CNC machines and robots
+ linuxcnc-uspace-dev - PC based motion controller for real-time Linux
+Changes:
+ linuxcnc (1:2.8.0~pre1) rosa; urgency=low
+ .
+   * New external axis offsets
+   * New support for Mesa 7i96 ethernet card
+   * New experimental QT based VCP
+   * New G52 local coordinate system offset
+   * New support for multiple spindles up to 9
+Checksums-Sha1:
+ d6f8e37bfbda3f6086eb3e9cdf411854f4129ca9 1651 linuxcnc_2.8.0~pre1.dsc
+ 20945c85083b2b4d5ed46beaaec45d201e93b491 32956204 linuxcnc_2.8.0~pre1.tar.xz
+ ac01d467ee84b2192e44984633f536294662048b 15158128 linuxcnc-doc-en_2.8.0~pre1_all.deb
+ 614b438ebfcd3f8de472e1b87ac4ec17953135b8 11727436 linuxcnc-doc-es_2.8.0~pre1_all.deb
+ 4acf746fd360b9fca843387fbbcd3376018e0b47 6158556 linuxcnc-doc-fr_2.8.0~pre1_all.deb
+ 0c0124f561c28bc400904dcabb145ab8f1e6eb07 11220444 linuxcnc-uspace-dbgsym_2.8.0~pre1_arm64.deb
+ eba9d98ce666deab9723f699d7a5c5bd44aa02fe 635060 linuxcnc-uspace-dev_2.8.0~pre1_arm64.deb
+ 43d5a54cafb0e87b13b436a682a03add8f5e4361 10526056 linuxcnc-uspace_2.8.0~pre1_arm64.deb
+ 51d54ad2eac14b560b1f5884ba2013803c3d41b1 22998 linuxcnc_2.8.0~pre1_arm64.buildinfo
+Checksums-Sha256:
+ 2c993fda780b3cfaf4c4a7ef957d535fcc5f28ccf3ead2d77290f5c50d54573d 1651 linuxcnc_2.8.0~pre1.dsc
+ 7f46f6112d91ebfd4e5bf9cbdecb8c952d442a89875a8c5769b7f1a494291822 32956204 linuxcnc_2.8.0~pre1.tar.xz
+ 7c7782952f4b987ac28ccd58cee8f770f0874ed265104e870562da4e8ea624af 15158128 linuxcnc-doc-en_2.8.0~pre1_all.deb
+ fbf3869410daf35c85e2878f1a287d4bb5ab6432367e130cace50f66b45205ad 11727436 linuxcnc-doc-es_2.8.0~pre1_all.deb
+ 4315953a4be5e465d212c7c463574ece85fbdba3fd0f458b9273fa0fc2409bf2 6158556 linuxcnc-doc-fr_2.8.0~pre1_all.deb
+ 396cfd623578560c8f3f107f829e6413029ccd42f30a875a5056b74fbc0f906b 11220444 linuxcnc-uspace-dbgsym_2.8.0~pre1_arm64.deb
+ 97c140a016931a8bd771865f6be5d1d698accaa19a0fc5ee445ec8824875e3ad 635060 linuxcnc-uspace-dev_2.8.0~pre1_arm64.deb
+ 6aa3adacb1998eaa2e6e1cd78b9ef9ee59bd05c9cd0adeae27afa67ba70daf1e 10526056 linuxcnc-uspace_2.8.0~pre1_arm64.deb
+ e5ef83b02db79f2c20c0e176e03327b97fddc74526aebb6f076335f3abdd040a 22998 linuxcnc_2.8.0~pre1_arm64.buildinfo
+Files:
+ 8ab8ee9d764b83a3069de6014716dee9 1651 misc extra linuxcnc_2.8.0~pre1.dsc
+ 69a70bcd6879fc1b8919bf123d7a73a9 32956204 misc extra linuxcnc_2.8.0~pre1.tar.xz
+ 7f61a155171f07863e665c789a15a59c 15158128 misc extra linuxcnc-doc-en_2.8.0~pre1_all.deb
+ 11b8a4ba010bed7b159fc55084dee24b 11727436 misc extra linuxcnc-doc-es_2.8.0~pre1_all.deb
+ 6d77f31f9b257ad569522d79fa349814 6158556 misc extra linuxcnc-doc-fr_2.8.0~pre1_all.deb
+ 565622a311092df3a3e75a4ef549b0b7 11220444 debug optional linuxcnc-uspace-dbgsym_2.8.0~pre1_arm64.deb
+ 36eb3df005a01399a13513a227e0fc43 635060 libs extra linuxcnc-uspace-dev_2.8.0~pre1_arm64.deb
+ 5a639af5e67447dba7cd676d2ab3d0db 10526056 misc extra linuxcnc-uspace_2.8.0~pre1_arm64.deb
+ b8e3e04252eae274db6d596bdd521381 22998 misc extra linuxcnc_2.8.0~pre1_arm64.buildinfo

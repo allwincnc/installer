@@ -15,8 +15,8 @@ Package-List:
  linuxcnc-uspace deb misc extra arch=any
  linuxcnc-uspace-dev deb libs extra arch=any
 Checksums-Sha1:
- 27c2c23a33acb959b5f8e8582ec68331c409110c 32768936 linuxcnc_2.8.0~pre1.tar.xz
+ 20945c85083b2b4d5ed46beaaec45d201e93b491 32956204 linuxcnc_2.8.0~pre1.tar.xz
 Checksums-Sha256:
- f8364bf3997a9908c400b02e48784ed0c899d29afeea1f11d9ad5a070a75a21d 32768936 linuxcnc_2.8.0~pre1.tar.xz
+ 7f46f6112d91ebfd4e5bf9cbdecb8c952d442a89875a8c5769b7f1a494291822 32956204 linuxcnc_2.8.0~pre1.tar.xz
 Files:
- d463093e99a5dbf2410139dd84677db6 32768936 linuxcnc_2.8.0~pre1.tar.xz
+ 69a70bcd6879fc1b8919bf123d7a73a9 32956204 linuxcnc_2.8.0~pre1.tar.xz
