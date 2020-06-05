@@ -16,6 +16,7 @@ source tools.sh
         "cmd:./install_arisc_driver.sh,     do:1,   arg:linuxcnc" \
         "cmd:./install_arisc_configs.sh,    do:1,   arg:linuxcnc" \
         "cmd:./install_arisc_firmware.sh,   do:1,   arg:" \
+        "cmd:./install_arisc_module.sh,     do:0,   arg:" \
         )
 
 
