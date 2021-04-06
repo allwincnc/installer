@@ -9,14 +9,10 @@ source tools.sh
         "cmd:./install_system_tweaks.sh,    do:1,   arg:" \
         "cmd:./install_system_lang.sh,      do:1,   arg:" \
         "cmd:./install_rt_kernel.sh,        do:1,   arg:" \
-        "cmd:./install_linuxcnc.sh,         do:1,   arg:2.7 en" \
-        "cmd:./install_machinekit.sh,       do:0,   arg:" \
-        "cmd:./install_gpio_driver.sh,      do:1,   arg:linuxcnc" \
-        "cmd:./install_gpio_configs.sh,     do:1,   arg:linuxcnc" \
+        "cmd:./install_linuxcnc.sh,         do:1,   arg:2.8 en" \
         "cmd:./install_arisc_driver.sh,     do:1,   arg:linuxcnc" \
         "cmd:./install_arisc_configs.sh,    do:1,   arg:linuxcnc" \
         "cmd:./install_arisc_firmware.sh,   do:1,   arg:" \
-        "cmd:./install_arisc_module.sh,     do:0,   arg:" \
         )
 
 
@@ -28,6 +24,13 @@ log "--------------------------------------------------------------"
 log "--- Installing **${NAME}** -------"
 log "--------------------------------------------------------"
 log ""
+
+
+
+
+# system update
+sudo apt update
+sudo apt upgrade
 
 
 

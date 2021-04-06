@@ -10,25 +10,13 @@ source tools.sh
    SRC_DIR="./linuxcnc"
   SRC_ARCH=("armhf" "arm64")
   DST_ARCH=("armv7" "aarch64")
- ALL_FILES=("linuxcnc-doc-en_2.8.0~pre1_all.deb" \
-            "linuxcnc-doc-es_2.8.0~pre1_all.deb" \
-            "linuxcnc-doc-fr_2.8.0~pre1_all.deb" \
-            "linuxcnc-uspace_2.8.0~pre1_armhf.deb" \
-            "linuxcnc-uspace-dbgsym_2.8.0~pre1_armhf.deb" \
-            "linuxcnc-uspace-dev_2.8.0~pre1_armhf.deb" \
-            "linuxcnc-uspace_2.8.0~pre1_arm64.deb" \
-            "linuxcnc-uspace-dbgsym_2.8.0~pre1_arm64.deb" \
-            "linuxcnc-uspace-dev_2.8.0~pre1_arm64.deb" \
-            \
-            "linuxcnc-doc-en_2.7.15_all.deb" \
-            "linuxcnc-doc-es_2.7.15_all.deb" \
-            "linuxcnc-doc-fr_2.7.15_all.deb" \
-            "linuxcnc-uspace_2.7.15_armhf.deb" \
-            "linuxcnc-uspace-dbgsym_2.7.15_armhf.deb" \
-            "linuxcnc-uspace-dev_2.7.15_armhf.deb" \
-            "linuxcnc-uspace_2.7.15_arm64.deb" \
-            "linuxcnc-uspace-dbgsym_2.7.15_arm64.deb" \
-            "linuxcnc-uspace-dev_2.7.15_arm64.deb" \
+ ALL_FILES=("linuxcnc-doc-en_2.8.1.84.g81a16a1fd_all.deb" \
+            "linuxcnc-doc-es_2.8.1.84.g81a16a1fd_all.deb" \
+            "linuxcnc-doc-fr_2.8.1.84.g81a16a1fd_all.deb" \
+            "linuxcnc-doc-cn_2.8.1.84.g81a16a1fd_all.deb" \
+            "linuxcnc-uspace_2.8.1.84.g81a16a1fd_armhf.deb" \
+            "linuxcnc-uspace-dbgsym_2.8.1.84.g81a16a1fd_armhf.deb" \
+            "linuxcnc-uspace-dev_2.8.1.84.g81a16a1fd_armhf.deb" \
             )
 
 
@@ -79,17 +67,20 @@ if [[ $# != 0 ]]; then
             "en") DOC_LNG="en"; ;;
             "es") DOC_LNG="es"; ;;
             "fr") DOC_LNG="fr"; ;;
+            "cn") DOC_LNG="cn"; ;;
         esac
     done
 fi
 
 # if no language for documentation selected yet
 while [[ "${DOC_LNG}" != "1"  && "${DOC_LNG}" != "2"  && "${DOC_LNG}" != "3" && \
-         "${DOC_LNG}" != "en" && "${DOC_LNG}" != "es" && "${DOC_LNG}" != "fr" ]]; do
+         "${DOC_LNG}" != "en" && "${DOC_LNG}" != "es" && "${DOC_LNG}" != "fr" && \
+         && "${DOC_LNG}" != "cn" ]]; do
     log     "Please select the language for documentation:"
     log     "  1: English"
     log     "  2: Spanish"
     log     "  3: French"
+    log     "  4: Chinese"
     read -p "Language for docs: " DOC_LNG
 done
 
@@ -98,9 +89,11 @@ case "${DOC_LNG}" in
     "1")  DOC_LNG="en"; ;;
     "2")  DOC_LNG="es"; ;;
     "3")  DOC_LNG="fr"; ;;
+    "4")  DOC_LNG="cn"; ;;
     "en") DOC_LNG="en"; ;;
     "es") DOC_LNG="es"; ;;
     "fr") DOC_LNG="fr"; ;;
+    "cn") DOC_LNG="cn"; ;;
     *)    DOC_LNG="en"; ;;
 esac
 
@@ -200,7 +193,7 @@ if [[ ! -d "${DOC_DIR}" ]]; then
 else
     docs_files_ok=""
     case $DOC_LNG in
-        "en") if [[ $(ls "${DOC_DIR}" | grep "on.pdf") || 
+        "en") if [[ $(ls "${DOC_DIR}" | grep "on.pdf") ||
                     $(ls "${DOC_DIR}" | grep "ed.pdf") ]]; then
                  docs_files_ok="1"
               fi ;;
