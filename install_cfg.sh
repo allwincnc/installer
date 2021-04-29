@@ -10,7 +10,7 @@ source tools.sh
         ALL_FILES=("config.hal" "config.ini" "tool.tbl")
           DSK_TPL="link.desktop"
           DSK_DIR="${HOME}/Desktop"
- DSK_CFG_DIR_LINK="${DSK_DIR}/cfg"
+ DSK_CFG_DIR_LINK="${DSK_DIR}/configs"
 
 
 
