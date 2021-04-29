@@ -6,13 +6,13 @@ source tools.sh
    NAME="orangecnc"
     ERR="0"
   TASKS=( \
-        "cmd:./install_system_tweaks.sh,    do:1,   arg:" \
-        "cmd:./install_system_lang.sh,      do:1,   arg:" \
-        "cmd:./install_rt_kernel.sh,        do:1,   arg:" \
-        "cmd:./install_linuxcnc.sh,         do:1,   arg:2.8 en" \
-        "cmd:./install_arisc_driver.sh,     do:1,   arg:linuxcnc" \
-        "cmd:./install_arisc_configs.sh,    do:1,   arg:linuxcnc" \
-        "cmd:./install_arisc_firmware.sh,   do:1,   arg:" \
+        "cmd:./install_sys_tweaks.sh,   do:1,   arg:" \
+        "cmd:./install_sys_lang.sh,     do:0,   arg:" \
+        "cmd:./install_kernel.sh,       do:1,   arg:" \
+        "cmd:./install_linuxcnc.sh,     do:1,   arg:en" \
+        "cmd:./install_drv.sh,          do:1,   arg:" \
+        "cmd:./install_cfg.sh,          do:1,   arg:" \
+        "cmd:./install_fw.sh,           do:1,   arg:" \
         )
 
 

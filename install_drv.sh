@@ -3,11 +3,12 @@
 source tools.sh
 
 # var list
-      NAME="ARISC drivers"
+      NAME="ARISC driver for the LinuxCNC"
    CUR_DIR=$(pwd)
+   SRC_DIR="linuxcnc/drv"
  TARGET_ID="0"
- ALL_FILES=("arisc_api.h" "arisc_gpio.c" "arisc_stepgen.c")
-   C_FILES=("arisc_gpio.c" "arisc_stepgen.c")
+ ALL_FILES=("api.h" "arisc.c")
+   C_FILES=("arisc.c")
 
 
 
@@ -19,37 +20,7 @@ log "--- Installing **${NAME}** -------"
 
 
 
-# select the target from the arguments list
-if [[ $# != 0 ]]; then
-    for arg in $*; do
-        case "${arg}" in
-            "linuxcnc")   TARGET_ID="1"; ;;
-            "machinekit") TARGET_ID="2"; ;;
-        esac
-    done
-fi
-
-# if no target selected yet
-while [[ "${TARGET_ID}" != "1" && "${TARGET_ID}" != "2" ]]; do
-    log     "Please select the target:"
-    log     "  1: for LinuxCNC"
-    log     "  2: for Machinekit"
-    read -p "Target: " TARGET_ID
-done
-
-# set target name
-case "${TARGET_ID}" in
-    1) TARGET="linuxcnc"; ;;
-    2) TARGET="machinekit"; ;;
-    *) TARGET="linuxcnc"; ;;
-esac
-
-
-
-
 # check a folder with sources
-SRC_DIR="${TARGET}/drivers/arisc"
-
 if [[ ! -d "${SRC_DIR}" ]]; then
     log "!!ERROR!!: Can't find the **./${SRC_DIR}** folder [**${0}:${LINENO}**]."
     cd "${CUR_DIR}"

@@ -3,9 +3,9 @@
 source tools.sh
 
 # var list
-      NAME="ARISC firmware"
+      NAME="ARISC core firmware"
    DST_DIR="/boot"
-   SRC_DIR="./armbian/arisc_firmware"
+   SRC_DIR="./armbian/fw"
  ALL_FILES=("arisc-fw.code" "fixup.cmd" "fixup.scr")
 
 

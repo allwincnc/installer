@@ -4,19 +4,18 @@ source tools.sh
 
 # var list
       NAME="LinuxCNC"
-   VERSION=""
    DOC_LNG=""
    DOC_DIR="/usr/share/doc/linuxcnc"
    SRC_DIR="./linuxcnc"
-  SRC_ARCH=("armhf" "arm64")
-  DST_ARCH=("armv7" "aarch64")
- ALL_FILES=("linuxcnc-doc-en_2.8.1.84.g81a16a1fd_all.deb" \
-            "linuxcnc-doc-es_2.8.1.84.g81a16a1fd_all.deb" \
-            "linuxcnc-doc-fr_2.8.1.84.g81a16a1fd_all.deb" \
-            "linuxcnc-doc-cn_2.8.1.84.g81a16a1fd_all.deb" \
-            "linuxcnc-uspace_2.8.1.84.g81a16a1fd_armhf.deb" \
-            "linuxcnc-uspace-dbgsym_2.8.1.84.g81a16a1fd_armhf.deb" \
-            "linuxcnc-uspace-dev_2.8.1.84.g81a16a1fd_armhf.deb" \
+  SRC_ARCH=("armhf")
+  DST_ARCH=("armv7")
+ ALL_FILES=("linuxcnc-doc-en_2.8.1_all.deb" \
+            "linuxcnc-doc-es_2.8.1_all.deb" \
+            "linuxcnc-doc-fr_2.8.1_all.deb" \
+            "linuxcnc-doc-cn_2.8.1_all.deb" \
+            "linuxcnc-uspace_2.8.1_armhf.deb" \
+            "linuxcnc-uspace-dbgsym_2.8.1_armhf.deb" \
+            "linuxcnc-uspace-dev_2.8.1_armhf.deb" \
             )
 
 
@@ -25,37 +24,6 @@ source tools.sh
 # greetings
 log ""
 log "--- Installing **${NAME}** -------"
-
-
-
-
-# select the VERSION from the arguments list
-if [[ $# != 0 ]]; then
-    for arg in $*; do
-        case $arg in
-            "2.7") VERSION="2.7"; ;;
-            "2.8") VERSION="2.8"; ;;
-        esac
-    done
-fi
-
-# if no VERSION selected yet
-while [[ "${VERSION}" != "1"   && "${VERSION}" != "2" && \
-         "${VERSION}" != "2.7" && "${VERSION}" != "2.8" ]]; do
-    log     "Please select the ${NAME} version:"
-    log     "  1: LinuxCNC 2.7"
-    log     "  2: LinuxCNC 2.8"
-    read -p "Version: " VERSION
-done
-
-# set VERSION
-case "${VERSION}" in
-    "1")   VERSION="2.7"; ;;
-    "2")   VERSION="2.8"; ;;
-    "2.7") VERSION="2.7"; ;;
-    "2.8") VERSION="2.8"; ;;
-    *)     VERSION="2.7"; ;;
-esac
 
 
 
@@ -149,10 +117,10 @@ done
 ALL_PKGS=$(ls $SRC_DIR | grep "all.deb")
 ARCH_PKGS=$(ls $SRC_DIR | grep "$PKG_ARCH.deb")
 
-MAIN_PKG=${SRC_DIR}"/"$(echo "${ARCH_PKGS}" | grep "uspace_$VERSION")
-DEV_PKG=$SRC_DIR"/"$(echo "$ARCH_PKGS" | grep "dev_$VERSION")
-DBG_PKG=$SRC_DIR"/"$(echo "$ARCH_PKGS" | grep "dbgsym_$VERSION")
-DOC_PKG=$SRC_DIR"/"$(echo "$ALL_PKGS" | grep "doc-${DOC_LNG}_$VERSION")
+MAIN_PKG=${SRC_DIR}"/"$(echo "${ARCH_PKGS}" | grep "uspace")
+DEV_PKG=$SRC_DIR"/"$(echo "$ARCH_PKGS" | grep "dev")
+DBG_PKG=$SRC_DIR"/"$(echo "$ARCH_PKGS" | grep "dbgsym")
+DOC_PKG=$SRC_DIR"/"$(echo "$ALL_PKGS" | grep "doc-${DOC_LNG}")
 
 
 
