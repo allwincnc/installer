@@ -3,8 +3,8 @@
 source tools.sh
 
 # var list
-             NAME="ARISC configs"
-          SRC_DIR="linuxcnc/configs"
+             NAME="ARISC configs for the LinuxCNC"
+          SRC_DIR="linuxcnc/cfg"
           DST_DIR="${HOME}/linuxcnc/configs"
          ALL_DIRS=("3A_test" "3T_test" "4A_test" "4T_test")
         ALL_FILES=("config.hal" "config.ini" "tool.tbl")
