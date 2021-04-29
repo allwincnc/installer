@@ -41,9 +41,10 @@ if [[ $# != 0 ]]; then
 fi
 
 # if no language for documentation selected yet
-while [[ "${DOC_LNG}" != "1"  && "${DOC_LNG}" != "2"  && "${DOC_LNG}" != "3" && \
-         "${DOC_LNG}" != "en" && "${DOC_LNG}" != "es" && "${DOC_LNG}" != "fr" && \
-         && "${DOC_LNG}" != "cn" ]]; do
+while [[ "${DOC_LNG}" != "1"  && "${DOC_LNG}" != "2"  && \
+         "${DOC_LNG}" != "3"  && "${DOC_LNG}" != "4" && \
+         "${DOC_LNG}" != "en" && "${DOC_LNG}" != "es" && \
+         "${DOC_LNG}" != "fr" && "${DOC_LNG}" != "cn" ]]; do
     log     "Please select the language for documentation:"
     log     "  1: English"
     log     "  2: Spanish"
