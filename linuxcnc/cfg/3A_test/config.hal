@@ -67,8 +67,6 @@ setp arisc.pwm.3.dir-pin     3
 setp arisc.pwm.3.dir-invert  1
 net s-rpm  spindle.0.speed-out  arisc.pwm.3.dc-cmd
 net s-en   spindle.0.on         arisc.pwm.3.enable  arisc.gpio.PC4-out
-net spindle-at-speed motion.spindle-at-speed
-sets spindle-at-speed true
 
 # other IO setup
 net estop  iocontrol.0.user-enable-out  iocontrol.0.emc-enable-in
