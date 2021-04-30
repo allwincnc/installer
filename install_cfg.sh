@@ -6,7 +6,7 @@ source tools.sh
              NAME="ARISC configs for the LinuxCNC"
           SRC_DIR="linuxcnc/cfg"
           DST_DIR="${HOME}/linuxcnc/configs"
-         ALL_DIRS=("3A_test" "3T_test" "4A_test" "4T_test")
+         ALL_DIRS=("3A_test" "3T_test")
         ALL_FILES=("config.hal" "config.ini" "tool.tbl")
           DSK_TPL="link.desktop"
           DSK_DIR="${HOME}/Desktop"
