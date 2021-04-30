@@ -843,11 +843,18 @@ void pwm_write(void *arg, long period)
 {
     static int32_t ch, dc, f;
     for ( ch = pwm_ch_cnt; ch--; ) {
-        if ( !ph.enable ) continue;
+        if ( pp.enable != ph.enable ) {
+            pp.enable = ph.enable;
+            if ( !ph.enable ) {
+                pwm_ch_data_set(ch, PWM_CH_WATCHDOG, 0, 1);
+                pwm_ch_times_setup(ch, 0, 0, ph.dc_max_t, ph.dir_hold, ph.dir_setup, 1);
+                continue;
+            }
+        }
         pwm_pins_update(ch);
-        pwm_ch_data_set(ch, PWM_CH_WATCHDOG, 1000, 1);
         dc = pwm_get_new_dc(ch);
         f = pwm_get_new_freq(ch, period);
+        pwm_ch_data_set(ch, PWM_CH_WATCHDOG, (f && dc ? 1000 : 0), 1);
         if ( pp.freq_mHz != f || pp.dc_s32 != dc ) {
             pwm_ch_times_setup(ch, f, dc, ph.dc_max_t, ph.dir_hold, ph.dir_setup, 1);
             pp.dc_s32 = dc;
