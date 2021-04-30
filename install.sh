@@ -3,7 +3,7 @@
 source tools.sh
 
 # var list
-   NAME="orangecnc"
+   NAME="h3cnc"
     ERR="0"
   TASKS=( \
         "cmd:./install_sys_tweaks.sh,   do:1,   arg:" \
