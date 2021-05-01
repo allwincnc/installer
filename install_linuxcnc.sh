@@ -118,9 +118,9 @@ done
 ALL_PKGS=$(ls $SRC_DIR | grep "all.deb")
 ARCH_PKGS=$(ls $SRC_DIR | grep "$PKG_ARCH.deb")
 
-MAIN_PKG=${SRC_DIR}"/"$(echo "${ARCH_PKGS}" | grep "uspace")
-DEV_PKG=$SRC_DIR"/"$(echo "$ARCH_PKGS" | grep "dev")
-DBG_PKG=$SRC_DIR"/"$(echo "$ARCH_PKGS" | grep "dbgsym")
+MAIN_PKG=${SRC_DIR}"/"$(echo "${ARCH_PKGS}" | grep "uspace_2")
+DEV_PKG=$SRC_DIR"/"$(echo "$ARCH_PKGS" | grep "dev_2")
+DBG_PKG=$SRC_DIR"/"$(echo "$ARCH_PKGS" | grep "dbgsym_2")
 DOC_PKG=$SRC_DIR"/"$(echo "$ALL_PKGS" | grep "doc-${DOC_LNG}")
 
 
