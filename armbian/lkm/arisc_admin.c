@@ -45,15 +45,17 @@ typedef struct
     unsigned int fw_dest_addr;
     unsigned int fw_max_size;
     unsigned int fw_reset_mem_addr;
+    unsigned int pll6_periph0_addr;
+    unsigned int cpus_clkcfg_addr;
 } cpu_t;
 
 enum { H2, H3, H5, CPU_CNT };
 
 static const cpu_t cpu[CPU_CNT] =
 {
-    {"H2", 0x00040000, (8+8+32)*1024, 0x01F01C00},
-    {"H3", 0x00040000, (8+8+32)*1024, 0x01F01C00},
-    {"H5", 0x00040000, (8+8+64)*1024, 0x01F01C00}
+    {"H2", 0x00040000, (8+8+32)*1024, 0x01F01C00, 0x01c20028, 0x01f01400},
+    {"H3", 0x00040000, (8+8+32)*1024, 0x01F01C00, 0x01c20028, 0x01f01400},
+    {"H5", 0x00040000, (8+8+64)*1024, 0x01F01C00, 0x01c20028, 0x01f01400}
 };
 
 static int cpu_id = H3;
@@ -161,12 +163,45 @@ lkm_dev_write(struct file *flip, const char *buffer, size_t len, loff_t *offset)
     // parse new data string
     while ( (token = strsep(&string," ")) != NULL )
     {
+        // get PLL reg info
+        #define real_addr   (cpu[cpu_id].pll6_periph0_addr)
+        #define page_addr   (real_addr & PAGE_MASK)
+        #define pages       (real_addr / PAGE_SIZE + 1)
+        #define off         (real_addr & ~PAGE_MASK)
+        if ( !strcmp(token, "pll6_periph0_get") )
+        {
+            mmap_addr = ioremap(page_addr, pages*PAGE_SIZE);
+            reg_val = readl(mmap_addr + off);
+            iounmap(mmap_addr);
+            #if DEBUG
+                printk(KERN_INFO DEVICE_NAME": " "%s:%lu\n", token, reg_val);
+            #endif
+            out_buf_len += snprintf(&out_buf[out_buf_len],
+                                    BUF_LEN - out_buf_len,
+                                    "%s:%lu\n", token, reg_val);
+        }
+        #define real_addr   (cpu[cpu_id].cpus_clkcfg_addr)
+        #define page_addr   (real_addr & PAGE_MASK)
+        #define pages       (real_addr / PAGE_SIZE + 1)
+        #define off         (real_addr & ~PAGE_MASK)
+        else if ( !strcmp(token, "cpus_clkcfg_get") )
+        {
+            mmap_addr = ioremap(page_addr, pages*PAGE_SIZE);
+            reg_val = readl(mmap_addr + off);
+            iounmap(mmap_addr);
+            #if DEBUG
+                printk(KERN_INFO DEVICE_NAME": " "%s:%lu\n", token, reg_val);
+            #endif
+            out_buf_len += snprintf(&out_buf[out_buf_len],
+                                    BUF_LEN - out_buf_len,
+                                    "%s:%lu\n", token, reg_val);
+        }
         #define real_addr   (cpu[cpu_id].fw_reset_mem_addr)
         #define page_addr   (real_addr & PAGE_MASK)
         #define pages       (real_addr / PAGE_SIZE + 1)
         #define off         (real_addr & ~PAGE_MASK)
         // get arisc core status
-        if ( !strcmp(token, "status") )
+        else if ( !strcmp(token, "status") )
         {
             mmap_addr = ioremap(page_addr, pages*PAGE_SIZE);
             reg_val = readl(mmap_addr + off);
