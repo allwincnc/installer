@@ -164,12 +164,12 @@ lkm_dev_write(struct file *flip, const char *buffer, size_t len, loff_t *offset)
     while ( (token = strsep(&string," ")) != NULL )
     {
         // get PLL reg info
-        #define real_addr   (cpu[cpu_id].pll6_periph0_addr)
-        #define page_addr   (real_addr & PAGE_MASK)
-        #define pages       (real_addr / PAGE_SIZE + 1)
-        #define off         (real_addr & ~PAGE_MASK)
         if ( !strcmp(token, "pll6_periph0_get") )
         {
+            #define real_addr   (cpu[cpu_id].pll6_periph0_addr)
+            #define page_addr   (real_addr & PAGE_MASK)
+            #define pages       (real_addr / PAGE_SIZE + 1)
+            #define off         (real_addr & ~PAGE_MASK)
             mmap_addr = ioremap(page_addr, pages*PAGE_SIZE);
             reg_val = readl(mmap_addr + off);
             iounmap(mmap_addr);
@@ -179,13 +179,17 @@ lkm_dev_write(struct file *flip, const char *buffer, size_t len, loff_t *offset)
             out_buf_len += snprintf(&out_buf[out_buf_len],
                                     BUF_LEN - out_buf_len,
                                     "%s:%lu\n", token, reg_val);
+            #undef real_addr
+            #undef page_addr
+            #undef pages
+            #undef off
         }
-        #define real_addr   (cpu[cpu_id].cpus_clkcfg_addr)
-        #define page_addr   (real_addr & PAGE_MASK)
-        #define pages       (real_addr / PAGE_SIZE + 1)
-        #define off         (real_addr & ~PAGE_MASK)
         else if ( !strcmp(token, "cpus_clkcfg_get") )
         {
+            #define real_addr   (cpu[cpu_id].cpus_clkcfg_addr)
+            #define page_addr   (real_addr & PAGE_MASK)
+            #define pages       (real_addr / PAGE_SIZE + 1)
+            #define off         (real_addr & ~PAGE_MASK)
             mmap_addr = ioremap(page_addr, pages*PAGE_SIZE);
             reg_val = readl(mmap_addr + off);
             iounmap(mmap_addr);
@@ -195,6 +199,10 @@ lkm_dev_write(struct file *flip, const char *buffer, size_t len, loff_t *offset)
             out_buf_len += snprintf(&out_buf[out_buf_len],
                                     BUF_LEN - out_buf_len,
                                     "%s:%lu\n", token, reg_val);
+            #undef real_addr
+            #undef page_addr
+            #undef pages
+            #undef off
         }
         #define real_addr   (cpu[cpu_id].fw_reset_mem_addr)
         #define page_addr   (real_addr & PAGE_MASK)
