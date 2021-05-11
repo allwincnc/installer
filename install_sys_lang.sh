@@ -21,6 +21,7 @@ log "--- Installing **${NAME}** -------"
 if [[ $# != 0 ]]; then
     for arg in $*; do
         case $arg in
+            "xx") LNG="xx"; ;;
             "en") LNG="en"; ;;
             "ru") LNG="ru"; ;;
         esac
@@ -31,6 +32,7 @@ fi
 while [[ "${LNG}" != "1"  && "${LNG}" != "2" && \
          "${LNG}" != "en" && "${LNG}" != "ru" ]]; do
     log     "Please select the system language:"
+    log     "  0: Don't touch anything"
     log     "  1: English"
     log     "  2: Russian"
     read -p "Language: " LNG
@@ -38,6 +40,7 @@ done
 
 # set language
 case "${LNG}" in
+    "0") LNG="xx"; ;;
     "1") LNG="en"; ;;
     "2") LNG="ru"; ;;
 esac
@@ -47,6 +50,15 @@ case "${LNG}" in
     "en") LNG_CODE="${LNG}_US"; ;;
     "ru") LNG_CODE="${LNG}_RU"; ;;
 esac
+
+
+
+
+if [[ "${LNG}" == "xx" ]]; then
+    log "--- **${NAME}** ++installation was ignored++ -------"
+    log ""
+    exit 0
+fi
 
 
 
