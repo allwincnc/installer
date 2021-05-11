@@ -29,8 +29,8 @@ if [[ $# != 0 ]]; then
 fi
 
 # if no language selected yet
-while [[ "${LNG}" != "1"  && "${LNG}" != "2" && \
-         "${LNG}" != "en" && "${LNG}" != "ru" ]]; do
+while [[ "${LNG}" != "0"  && "${LNG}" != "1"  && "${LNG}" != "2" && \
+         "${LNG}" != "xx" && "${LNG}" != "en" && "${LNG}" != "ru" ]]; do
     log     "Please select the system language:"
     log     "  0: Don't touch anything"
     log     "  1: English"
