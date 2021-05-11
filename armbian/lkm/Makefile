@@ -31,4 +31,4 @@ remove:
 	sudo rmmod $(MODULE_NAME)
 	sudo rm -f $(CONF_DIR)$(CONF_FILE)
 	sudo rm -f $(DRV_DIR)$(MODULE_NAME).ko
-	
+	-sudo rm -rf $(DRV_DIR)
