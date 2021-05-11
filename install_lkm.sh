@@ -55,6 +55,7 @@ done
 
 # build the module
 cd "${DST_DIR}"
+make remove
 make -C "${DST_DIR}" all
 cd "${CUR_DIR}"
 
