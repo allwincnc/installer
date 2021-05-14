@@ -49,7 +49,7 @@ typedef struct
     unsigned int cpus_clkcfg_addr;
 } cpu_t;
 
-enum { H2, H3, H5, CPU_CNT };
+enum { H2, H3, H5, H6, CPU_CNT };
 
 static const cpu_t cpu[CPU_CNT] =
 {
