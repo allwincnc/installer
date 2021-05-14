@@ -15,20 +15,20 @@
 
 
 
-#define ARISC_CPU_FREQ          450000000 // Hz
-#define ARISC_FW_BASE           (0x00040000) // for ARM CPU it's 0x00040000
-#define ARISC_FW_SIZE           ((8+8+32)*1024)
+#define ARISC_CPU_FREQ          300000000 // Hz
+#define ARISC_FW_BASE           (0x00100000) // for ARM CPU it's 0x00100000
+#define ARISC_FW_SIZE           ((8+8+80)*1024)
 #define ARISC_SHM_SIZE          (4096)
 #define ARISC_SHM_BASE          (ARISC_FW_BASE + ARISC_FW_SIZE - ARISC_SHM_SIZE)
 
 
 
 
-#define GPIO_BASE               0x01c20800
-#define GPIO_R_BASE             0x01f02c00
+#define GPIO_BASE               0x0300B000
+#define GPIO_R_BASE             0x07022000
 #define GPIO_BANK_SIZE          0x24
 
-#define GPIO_PORTS_MAX_CNT      8
+#define GPIO_PORTS_MAX_CNT      10
 #define GPIO_PINS_MAX_CNT       24
 
 enum
@@ -62,7 +62,7 @@ enum
     GPIO_PULL_CNT
 };
 
-enum { PA, PB, PC, PD, PE, PF, PG, PL };
+enum { PA, PB, PC, PD, PE, PF, PG, PH, PL, PM };
 enum { LOW, HIGH };
 
 #define GPIO_PIN_SET(PORT,PIN_MASK) \
@@ -910,7 +910,7 @@ int32_t shmem_init(const char *comp_name)
     off = GPIO_BASE & (4096 - 1);
     _gpio_vrt_addr = mmap(NULL, 4096, PROT_READ | PROT_WRITE, MAP_SHARED, mem_fd, addr);
     if (_gpio_vrt_addr == MAP_FAILED) PRINT_ERROR_AND_RETURN("ERROR: gpio mmap() failed\n",-3);
-    for ( port = PA; port <= PG; ++port )
+    for ( port = PA; port <= PH; ++port )
     {
         _GPIO[port] = (_GPIO_PORT_REG_t *)(_gpio_vrt_addr + (off + port*0x24)/4);
     }
@@ -920,7 +920,10 @@ int32_t shmem_init(const char *comp_name)
     off = GPIO_R_BASE & (4096 - 1);
     _r_gpio_vrt_addr = mmap(NULL, 4096, PROT_READ | PROT_WRITE, MAP_SHARED, mem_fd, addr);
     if (_r_gpio_vrt_addr == MAP_FAILED) PRINT_ERROR_AND_RETURN("ERROR: r_gpio mmap() failed\n",-4);
-    _GPIO[PL] = (_GPIO_PORT_REG_t *)(_r_gpio_vrt_addr + off/4);
+    for ( port = PL; port <= PM; ++port )
+    {
+        _GPIO[port] = (_GPIO_PORT_REG_t *)(_r_gpio_vrt_addr + (off + (port-PL)*0x24)/4);
+    }
 
     // no need to keep phy memory file open after mmap
     close(mem_fd);
