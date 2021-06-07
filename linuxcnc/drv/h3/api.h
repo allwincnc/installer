@@ -795,19 +795,6 @@ uint32_t enc_ch_data_get(uint32_t c, uint32_t name, uint32_t safe)
 }
 
 static inline
-int32_t enc_ch_state_set(uint32_t c, uint32_t enable, uint32_t safe )
-{
-    if ( safe ) {
-        if ( c >= ENC_CH_MAX_CNT ) return -1;
-    }
-    _enc_spin_lock();
-    *_encc[c][ENC_CH_BUSY] = enable;
-    if ( enable && c >= *_encd[ENC_CH_CNT] ) *_encd[ENC_CH_CNT] = c+1;
-    _enc_spin_unlock();
-    return 0;
-}
-
-static inline
 int32_t enc_ch_pins_setup(
     uint32_t c,
     uint32_t a_port, uint32_t a_pin, uint32_t a_inv, uint32_t a_all,

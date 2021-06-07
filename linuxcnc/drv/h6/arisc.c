@@ -545,6 +545,8 @@ int32_t malloc_and_export(const char *comp_name, int32_t comp_id)
 
         #undef EXPORT_PIN
     }
+
+    enc_data_set(ENC_CH_CNT, enc_ch_cnt, 1);
 #endif
 
     return 0;
@@ -918,7 +920,7 @@ void enc_read(void *arg, long period)
     {
         if ( ep.enable != eh.enable ) {
             ep.enable = eh.enable;
-            enc_ch_state_set(ch, (enc_a_pins_ok(ch) ? eh.enable : 0), 0);
+            enc_ch_data_set(ch, ENC_CH_BUSY, (enc_a_pins_ok(ch) ? eh.enable : 0), 0);
             if ( !eh.enable ) continue;
         }
 
