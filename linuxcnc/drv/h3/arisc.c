@@ -924,6 +924,8 @@ void enc_read(void *arg, long period)
             if ( !eh.enable ) continue;
         }
 
+        enc_pins_update(ch);
+
         if ( ep.cnt_mode != eh.cnt_mode ) {
             ep.cnt_mode = eh.cnt_mode;
             enc_ch_data_set(ch, ENC_CH_B_USE, (enc_b_pins_ok(ch) ? !eh.cnt_mode : 0), 0);
