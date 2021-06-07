@@ -519,7 +519,7 @@ int32_t malloc_and_export(const char *comp_name, int32_t comp_id)
             EXPORT_PIN(HAL_IN,u32,a_port,"A-port", UINT32_MAX);
             EXPORT_PIN(HAL_IN,u32,a_pin,"A-pin", UINT32_MAX);
             EXPORT_PIN(HAL_IN,bit,a_inv,"A-invert", 0);
-            EXPORT_PIN(HAL_IN,bit,a_inv,"A-all-edges", 0);
+            EXPORT_PIN(HAL_IN,bit,a_all,"A-all-edges", 0);
 
             EXPORT_PIN(HAL_IN,u32,b_port,"B-port", UINT32_MAX);
             EXPORT_PIN(HAL_IN,u32,b_pin,"B-pin", UINT32_MAX);
@@ -527,7 +527,7 @@ int32_t malloc_and_export(const char *comp_name, int32_t comp_id)
             EXPORT_PIN(HAL_IN,u32,z_port,"Z-port", UINT32_MAX);
             EXPORT_PIN(HAL_IN,u32,z_pin,"Z-pin", UINT32_MAX);
             EXPORT_PIN(HAL_IN,bit,z_inv,"Z-invert", 0);
-            EXPORT_PIN(HAL_IN,bit,z_inv,"Z-all-edges", 0);
+            EXPORT_PIN(HAL_IN,bit,z_all,"Z-all-edges", 0);
 
             EXPORT_PIN(HAL_IO,float,pos_scale,"pos-scale", 1.0);
 
