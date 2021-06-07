@@ -916,7 +916,7 @@ void enc_read(void *arg, long period)
 {
     static int32_t counts, ch;
 
-    for ( ch = pwm_ch_cnt; ch--; )
+    for ( ch = enc_ch_cnt; ch--; )
     {
         if ( ep.enable != eh.enable ) {
             ep.enable = eh.enable;
