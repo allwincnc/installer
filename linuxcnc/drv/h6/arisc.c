@@ -193,6 +193,7 @@ typedef struct
     hal_float_t *vel; // out
     hal_float_t *vel_rpm; // out
     hal_s32_t *counts; // out
+    hal_u32_t *period_ticks; // out
 }
 enc_ch_shmem_t;
 
@@ -224,6 +225,7 @@ typedef struct
     hal_float_t vel; // out
     hal_float_t vel_rpm; // out
     hal_s32_t counts; // out
+    hal_u32_t period_ticks; // out
 
     hal_u32_t no_counts_time;
 }
@@ -535,6 +537,7 @@ int32_t malloc_and_export(const char *comp_name, int32_t comp_id)
             EXPORT_PIN(HAL_OUT,float,vel,"vel", 0.0);
             EXPORT_PIN(HAL_OUT,float,vel_rpm,"vel-rpm", 0.0);
             EXPORT_PIN(HAL_OUT,s32,counts,"counts", 0);
+            EXPORT_PIN(HAL_OUT,u32,period_ticks,"period_ticks", 0);
 
             ep.no_counts_time = 0;
         }
@@ -933,9 +936,9 @@ void enc_read(void *arg, long period)
 
         if ( eh.reset ) {
             eh.counts = 0;
-            enc_ch_pos_set(ch, 0, 0);
+            enc_ch_pos_set(ch, 0, 0, 0);
         } else {
-            eh.counts = enc_ch_pos_get(ch, 0);
+            enc_ch_pos_get(ch, &(eh.counts), &(eh.period_ticks), 0);
             if ( eh.x4_mode ) eh.counts /= 4;
         }
 
@@ -956,12 +959,18 @@ void enc_read(void *arg, long period)
         } else {
             ep.no_counts_time += period;
             if ( ep.counts != eh.counts) {
-                eh.vel = (((hal_float_t)eh.counts) - ((hal_float_t)ep.counts))
-                    / eh.pos_scale
-                    * ((hal_float_t)ep.no_counts_time)
-                    / 1000000000;
+                if (eh.period_ticks < 4000) { // fall back to frequency count if period is low
+                    eh.vel = (((hal_float_t)eh.counts) - ((hal_float_t)ep.counts))
+                            / eh.pos_scale
+                            / ((hal_float_t)ep.no_counts_time)
+                            * 1000000000;
+                } else { // compute velocity from period
+                    eh.vel = (ARISC_CPU_FREQ / ((hal_float_t)eh.period_ticks))
+                            / eh.pos_scale;
+                }
                 eh.vel_rpm = eh.vel * 60;
                 ep.no_counts_time = 0;
+		ep.counts = eh.counts;
             } else {
                 if ( ep.no_counts_time > 1000000000 ) {
                     eh.vel = 0;
@@ -971,7 +980,6 @@ void enc_read(void *arg, long period)
             }
         }
 
-        ep.counts = eh.counts;
     }
 }
 #endif

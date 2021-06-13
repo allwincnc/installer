@@ -172,6 +172,9 @@ enum
     ENC_CH_Z_ALL,
     ENC_CH_Z_STATE,
 
+    ENC_CH_PER_TICKS,
+    ENC_CH_LAST_TICK,
+
     ENC_CH_DATA_CNT
 };
 
@@ -848,28 +851,31 @@ int32_t enc_ch_pins_setup(
 }
 
 static inline
-int32_t enc_ch_pos_get(uint32_t c, uint32_t safe)
+int32_t enc_ch_pos_get(uint32_t c, volatile int32_t *pos, volatile uint32_t *per_ticks, uint32_t safe)
 {
     if ( safe ) {
-        if ( c >= ENC_CH_MAX_CNT ) return 0;
+        if ( c >= ENC_CH_MAX_CNT ) return -1;
     }
     _enc_spin_lock();
-    int32_t value = (int32_t) *_encc[c][ENC_CH_POS];
+    *pos = (int32_t) *_encc[c][ENC_CH_POS];
+    *per_ticks = (uint32_t) * _encc[c][ENC_CH_PER_TICKS];
     _enc_spin_unlock();
-    return value;
+    return 0;
 }
 
 static inline
-int32_t enc_ch_pos_set(uint32_t c, int32_t pos, uint32_t safe)
+int32_t enc_ch_pos_set(uint32_t c, int32_t pos, uint32_t per_ticks, uint32_t safe)
 {
     if ( safe ) {
         if ( c >= ENC_CH_MAX_CNT ) return -1;
     }
     _enc_spin_lock();
     *_encc[c][ENC_CH_POS] = (uint32_t) pos;
+    *_encc[c][ENC_CH_PER_TICKS] = (uint32_t) per_ticks;
     _enc_spin_unlock();
     return 0;
 }
+
 #endif
 
 
