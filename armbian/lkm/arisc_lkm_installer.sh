@@ -107,6 +107,11 @@ fi
 
 sudo sed -i -e "s/arisc_lkm_installer/arisc_fw_loader/" "/etc/rc.local"
 
+if [[ ! $(cat /etc/rc.local | grep arisc_fw_loader) ]]; then
+    log "!!ERROR!!: Can't change the **/etc/rc.local** file [**${0}:${LINENO}**]."
+    exit 1
+fi
+
 
 
 
