@@ -6,7 +6,6 @@ source tools.sh
       NAME="ARISC kernel module"
    CUR_DIR=$(pwd)
    DST_DIR="./arisc_lkm_tmp"
-   SRC_DIR="."
  ALL_FILES=("Makefile" "arisc_admin.c")
 
 
@@ -29,12 +28,12 @@ fi
 
 # check/copy files
 for file in ${ALL_FILES[*]}; do
-    if [[ ! -f "${SRC_DIR}/${file}" ]]; then
-        log "!!ERROR!!: Can't find the **${SRC_DIR}/${file}** file [**${0}:${LINENO}**]."
+    if [[ ! -f "${file}" ]]; then
+        log "!!ERROR!!: Can't find the **${file}** file [**${0}:${LINENO}**]."
         exit 1
     fi
 
-    cp -f "${SRC_DIR}/${file}" "${DST_DIR}/${file}"
+    cp -f "${file}" "${DST_DIR}/${file}"
     if [[ ! -f "${DST_DIR}/${file}" ]]; then
         log "!!ERROR!!: Can't create the **${DST_DIR}/${file}** file [**${0}:${LINENO}**]."
         exit 1
