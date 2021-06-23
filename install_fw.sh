@@ -65,21 +65,12 @@ SRC_DIR="${SRC_DIR}/${CHIP}"
 
 
 
-# check a folders
+# check/create folders
 if [[ ! -d "${SRC_DIR}" ]]; then
     log "!!ERROR!!: Can't find the **${SRC_DIR}** folder [**${0}:${LINENO}**]."
     exit 1
 fi
 
-if [[ ! -d "${DST_DIR}" ]]; then
-    log "!!ERROR!!: Can't find the **${DST_DIR}** folder [**${0}:${LINENO}**]."
-    exit 1
-fi
-
-
-
-
-# create destination folder (if needs)
 if [[ ! -d "${DST_DIR}" ]]; then
     sudo mkdir "${DST_DIR}"
 fi
