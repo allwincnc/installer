@@ -46,7 +46,11 @@ done
 
 # build the module
 cd "${DST_DIR}"
-sudo make remove
+
+if [[ -f "/dev/arisc" ]]; then
+    sudo make remove
+fi
+
 sudo make -C "${DST_DIR}" all
 cd "${CUR_DIR}"
 
