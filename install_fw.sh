@@ -5,9 +5,9 @@ source tools.sh
 # var list
       NAME="ARISC core firmware"
       CHIP=""
-   DST_DIR="/boot"
+   DST_DIR="/boot/allwincnc"
    SRC_DIR="./armbian/fw"
- ALL_FILES=("arisc-fw.code" "fixup.cmd" "fixup.scr")
+ ALL_FILES=("arisc-fw.code")
 
 
 
@@ -74,6 +74,14 @@ fi
 if [[ ! -d "${DST_DIR}" ]]; then
     log "!!ERROR!!: Can't find the **${DST_DIR}** folder [**${0}:${LINENO}**]."
     exit 1
+fi
+
+
+
+
+# create destination folder (if needs)
+if [[ ! -d "${DST_DIR}" ]]; then
+    sudo mkdir "${DST_DIR}"
 fi
 
 
