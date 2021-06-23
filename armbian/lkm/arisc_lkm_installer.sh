@@ -21,7 +21,7 @@ log "--- Installing **${NAME}** -------"
 
 # create TMP folder
 if [[ ! -d "${DST_DIR}" ]]; then
-    mkdir "${DST_DIR}"
+    sudo mkdir "${DST_DIR}"
 fi
 
 
@@ -34,7 +34,7 @@ for file in ${ALL_FILES[*]}; do
         exit 1
     fi
 
-    cp -f "${SRC_DIR}/${file}" "${DST_DIR}/${file}"
+    sudo cp -f "${SRC_DIR}/${file}" "${DST_DIR}/${file}"
     if [[ ! -f "${DST_DIR}/${file}" ]]; then
         log "!!ERROR!!: Can't create the **${DST_DIR}/${file}** file [**${0}:${LINENO}**]."
         exit 1
@@ -46,8 +46,8 @@ done
 
 # build the module
 cd "${DST_DIR}"
-make remove
-make -C "${DST_DIR}" all
+sudo make remove
+sudo make -C "${DST_DIR}" all
 cd "${CUR_DIR}"
 
 if [[ ! -f "${DST_DIR}/arisc_admin.ko" ]]; then
@@ -60,7 +60,7 @@ fi
 
 # install the module
 cd "${DST_DIR}"
-make -C "${DST_DIR}" install
+sudo make -C "${DST_DIR}" install
 cd "${CUR_DIR}"
 
 if [[ ! -f "/lib/modules/$(uname -r)/kernel/drivers/arisc/arisc_admin.ko" || \
@@ -93,7 +93,7 @@ fi
 
 # remove TMP folder
 if [[ -d "${DST_DIR}" ]]; then
-    rm -fr "${DST_DIR}"
+    sudo rm -fr "${DST_DIR}"
 fi
 
 
