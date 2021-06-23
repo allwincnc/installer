@@ -42,6 +42,8 @@ for file in ${ALL_FILES[*]}; do
     fi
 done
 
+sudo cp -f "${CUR_DIR}/tools.sh" "${DST_DIR}/tools.sh"
+
 
 
 
