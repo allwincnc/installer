@@ -5,8 +5,8 @@ source tools.sh
 # var list
       NAME="ARISC kernel module"
    CUR_DIR=$(pwd)
-   DST_DIR="/boot/allwincnc/arisc_lkm_tmp"
    SRC_DIR="/boot/allwincnc/"
+ SRC_DIR_E="\\/boot\\/allwincnc/"
  ALL_FILES=("Makefile" "arisc_admin.c")
 
 
@@ -19,24 +19,12 @@ log "--- Installing **${NAME}** -------"
 
 
 
-# create TMP folder
-if [[ ! -d "${DST_DIR}" ]]; then
-    sudo mkdir "${DST_DIR}"
-fi
+# check files
+cd "${SRC_DIR}"
 
-
-
-
-# check/copy files
 for file in ${ALL_FILES[*]}; do
-    if [[ ! -f "${SRC_DIR}/${file}" ]]; then
-        log "!!ERROR!!: Can't find the **${SRC_DIR}/${file}** file [**${0}:${LINENO}**]."
-        exit 1
-    fi
-
-    sudo cp -f "${SRC_DIR}/${file}" "${DST_DIR}/${file}"
-    if [[ ! -f "${DST_DIR}/${file}" ]]; then
-        log "!!ERROR!!: Can't create the **${DST_DIR}/${file}** file [**${0}:${LINENO}**]."
+    if [[ ! -f "${file}" ]]; then
+        log "!!ERROR!!: Can't find the **${file}** file [**${0}:${LINENO}**]."
         exit 1
     fi
 done
@@ -45,16 +33,15 @@ done
 
 
 # build the module
-cd "${DST_DIR}"
+sudo make clean
 
 if [[ -f "/dev/arisc" ]]; then
     sudo make remove
 fi
 
-sudo make -C "${DST_DIR}" all
-cd "${CUR_DIR}"
+sudo make all
 
-if [[ ! -f "${DST_DIR}/arisc_admin.ko" ]]; then
+if [[ ! -f "arisc_admin.ko" ]]; then
     log "!!ERROR!!: Failed to build the kernel module [**${0}:${LINENO}**]."
     exit 1
 fi
@@ -63,15 +50,15 @@ fi
 
 
 # install the module
-cd "${DST_DIR}"
-sudo make -C "${DST_DIR}" install
-cd "${CUR_DIR}"
+sudo make install
 
 if [[ ! -f "/lib/modules/$(uname -r)/kernel/drivers/arisc/arisc_admin.ko" || \
       ! -f "/etc/modules-load.d/arisc.conf" ]]; then
     log "!!ERROR!!: Failed to install the kernel module [**${0}:${LINENO}**]."
     exit 1
 fi
+
+sudo make clean
 
 
 
@@ -95,26 +82,29 @@ fi
 
 
 
-# remove TMP folder
-if [[ -d "${DST_DIR}" ]]; then
-    sudo rm -fr "${DST_DIR}"
-fi
-
-
-
-
 # start ARISC firmware loader on every boot
 if [[ ! -f "/etc/rc.local" ]]; then
     log "!!ERROR!!: Can't find the **/etc/rc.local** file [**${0}:${LINENO}**]."
     exit 1
 fi
 
-sudo sed -i -e "s/arisc_lkm_installer/arisc_fw_loader/" "/etc/rc.local"
+if [[ ! $(cat /etc/rc.local | grep arisc_lkm_installer) && \
+      ! $(cat /etc/rc.local | grep arisc_fw_loader) ]]; then
+    sudo sed -i -e "s/^exit 0/${SRC_DIR_E}\/arisc_fw_loader\.sh\nexit 0/" "/etc/rc.local"
+elif [[ ! $(cat /etc/rc.local | grep arisc_fw_loader) ]]; then
+    sudo sed -i -e "s/arisc_lkm_installer/arisc_fw_loader/" "/etc/rc.local"
+fi
 
 if [[ ! $(cat /etc/rc.local | grep arisc_fw_loader) ]]; then
     log "!!ERROR!!: Can't change the **/etc/rc.local** file [**${0}:${LINENO}**]."
     exit 1
 fi
+
+
+
+
+# go back
+cd "${CUR_DIR}"
 
 
 
