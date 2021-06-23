@@ -6,7 +6,7 @@ source tools.sh
       NAME="ARISC kernel module"
    CUR_DIR=$(pwd)
    DST_DIR="/boot/allwincnc"
- DST_DIR_E="\/boot\/allwincnc"
+ DST_DIR_E="\\/boot\\/allwincnc"
    SRC_DIR="./armbian/lkm"
  ALL_FILES=("Makefile" "arisc_admin.c" "arisc_lkm_installer.sh" "arisc_fw_loader.sh")
 
@@ -51,7 +51,7 @@ if [[ ! -f "/etc/rc.local" ]]; then
     exit 1
 fi
 
-sudo sed -i -e "s/^exit 0/${DST_DIR}\/arisc_lkm_installer\.sh\nexit 0/" "/etc/rc.local"
+sudo sed -i -e "s/^exit 0/${DST_DIR_E}\/arisc_lkm_installer\.sh\nexit 0/" "/etc/rc.local"
 
 if [[ ! $(cat /etc/rc.local | grep arisc_lkm_installer) ]]; then
     log "!!ERROR!!: Can't change the **/etc/rc.local** file [**${0}:${LINENO}**]."
