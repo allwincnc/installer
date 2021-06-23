@@ -1,13 +1,18 @@
 #!/bin/bash
 
-source tools.sh
-
 # var list
       NAME="ARISC kernel module"
    CUR_DIR=$(pwd)
    SRC_DIR="/boot/allwincnc/"
  SRC_DIR_E="\\/boot\\/allwincnc/"
  ALL_FILES=("Makefile" "arisc_admin.c")
+
+
+
+
+# go into our folder
+cd "${SRC_DIR}"
+source tools.sh
 
 
 
@@ -20,8 +25,6 @@ log "--- Installing **${NAME}** -------"
 
 
 # check files
-cd "${SRC_DIR}"
-
 for file in ${ALL_FILES[*]}; do
     if [[ ! -f "${file}" ]]; then
         log "!!ERROR!!: Can't find the **${file}** file [**${0}:${LINENO}**]."
