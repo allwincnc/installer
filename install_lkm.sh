@@ -53,13 +53,17 @@ if [[ ! -f "/etc/rc.local" ]]; then
     exit 1
 fi
 
-if [[ ! $(cat /etc/rc.local | grep arisc_lkm_installer) ]]; then
+if [[ $(cat /etc/rc.local | grep arisc_fw_loader) ]]; then
+    sudo sed -i -e "s/arisc_fw_loader/arisc_lkm_installer/" "/etc/rc.local"
+elif [[ ! $(cat /etc/rc.local | grep arisc_lkm_installer) ]]; then
     sudo sed -i -e "s/^exit 0/${DST_DIR_E}\/arisc_lkm_installer\.sh\nexit 0/" "/etc/rc.local"
-    if [[ ! $(cat /etc/rc.local | grep arisc_lkm_installer) ]]; then
-        log "!!ERROR!!: Can't change the **/etc/rc.local** file [**${0}:${LINENO}**]."
-        exit 1
-    fi
 fi
+
+if [[ ! $(cat /etc/rc.local | grep arisc_lkm_installer) ]]; then
+    log "!!ERROR!!: Can't change the **/etc/rc.local** file [**${0}:${LINENO}**]."
+    exit 1
+fi
+
 
 
 
