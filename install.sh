@@ -10,7 +10,7 @@ source tools.sh
         "cmd:./install_sys_tweaks.sh,   do:1,  arg:" \
         "cmd:./install_sys_lang.sh,     do:1,  arg:" \
         "cmd:./install_kernel.sh,       do:1,  arg:" \
-        "cmd:./install_lkm.sh,          do:0,  arg:" \
+        "cmd:./install_lkm.sh,          do:1,  arg:" \
         "cmd:./install_linuxcnc.sh,     do:1,  arg:" \
         "cmd:./install_drv.sh,          do:1,  arg:" \
         "cmd:./install_cfg.sh,          do:1,  arg:" \
